@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "xelt"
+version = "3.0.0"
+description = "Xelt is a multi-purpose discord bot with features ranging from user information to music!"
+authors = ["No767, Edqe14, ThEditor"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">3.8,<4.0"
+discord-py = {extras = ["voice"], version = "^2.1.0"}
+python-dotenv = "^0.21.0"
+aiodns = "^3.0.0"
+brotli = "^1.0.9"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^2.21.0"
+pytest = "^7.2.0"
+pytest-asyncio = "^0.20.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
