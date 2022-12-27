@@ -7,7 +7,7 @@ You'll need these installed on your machine:
 - Optional: pyenv
 
 > **Note**
-> `uvloop` is used to speed up Xelt internally. uvloop depends on libuv, which is what node.js uses under the hood for its event loop. The maintainers of `uvloop` refuse to add support for Windows (see https://github.com/MagicStack/uvloop/#14 for more details), so Xelt probably will have to be developed on a Unix-like system. If you are using windows, then wsl2 is needed. Note that `uvloop` depends on openssl 1.1, so make sure to installed the headers and shared libs for that on your wsl2 distro.
+> `uvloop` is used to speed up Xelt internally. uvloop depends on libuv, which is what node.js uses under the hood for its event loop. The maintainers of `uvloop` refuse to add support for Windows (see https://github.com/MagicStack/uvloop/issues/14 for more details), so Xelt probably will have to be developed on a Unix-like system. If you are using windows, then wsl2 is needed. Note that `uvloop` depends on openssl 1.1, so make sure to installed the headers and shared libs for that on your wsl2 distro.
 
 ## Basic setup steps
 
