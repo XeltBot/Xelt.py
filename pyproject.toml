@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "xelt"
+name = "xelt.py"
 version = "3.0.0"
 description = "Xelt is a multi-purpose discord bot with features ranging from user information to music!"
 authors = ["No767, Edqe14, ThEditor"]
