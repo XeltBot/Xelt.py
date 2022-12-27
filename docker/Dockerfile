@@ -18,13 +18,13 @@ RUN python -m pip install --upgrade pip setuptools
 RUN curl -sSL https://install.python-poetry.org | python -
 ENV PATH="${PATH}:/root/.local/bin"
 
-WORKDIR /Xelt.py
+WORKDIR /Xelt
 
-COPY /pyproject.toml /Xelt.py/
-COPY /poetry.lock /Xelt.py/
+COPY /pyproject.toml /Xelt/
+COPY /poetry.lock /Xelt/
 
 RUN poetry export -f requirements.txt --output requirements.txt --without-hashes \
-  && pip wheel --wheel-dir=/Xelt.py/wheels -r requirements.txt
+  && pip wheel --wheel-dir=/Xelt/wheels -r requirements.txt
 
 ####################################################################################################
 ## Final image
@@ -39,31 +39,31 @@ RUN apt update \
   netcat
 
 # Note that wait-for is being copied over. This will be needed for Docker Compose support later
-WORKDIR /Xelt.py
-COPY /bot/xelt.py /Xelt.py/bot/
-COPY /bot/xeltcore.py /Xelt.py/bot/
-COPY /bot/cogs /Xelt.py/bot/cogs/
-COPY /docker/wait-for /Xelt.py/wait-for
+WORKDIR /Xelt
+COPY /bot/xelt.py /Xelt/bot/
+COPY /bot/xeltcore.py /Xelt/bot/
+COPY /bot/cogs /Xelt/bot/cogs/
+COPY /docker/wait-for /Xelt/wait-for
 
-COPY --from=builder /Xelt.py/wheels /Xelt.py/wheels
-COPY --from=builder /Xelt.py/requirements.txt /Xelt.py/requirements.txt
+COPY --from=builder /Xelt/wheels /Xelt/wheels
+COPY --from=builder /Xelt/requirements.txt /Xelt/requirements.txt
 
 RUN pip install --upgrade pip setuptools
 
-RUN adduser --disabled-password --gecos "" xelt.py \
-  && chown -R xelt.py:xelt.py /Xelt.py \
-  && chmod +x /Xelt.py/wait-for
+RUN adduser --disabled-password --gecos "" xelt \
+  && chown -R xelt:xelt /Xelt \
+  && chmod +x /Xelt/wait-for
 
-USER xelt.py
+USER xelt
 
 ENV PATH="${PATH}:${HOME}/.local/bin"
 
-RUN pip install --user --no-index --find-links=/Xelt.py/wheels -r requirements.txt
+RUN pip install --user --no-index --find-links=/Xelt/wheels -r requirements.txt
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
 # A start.sh script is needed later for prisma to migrate the models
-CMD ["python", "/Xelt.py/bot/xelt.py"]
+CMD ["python", "/Xelt/bot/xelt.py"]
 
 STOPSIGNAL SIGTERM
 
