@@ -2,7 +2,9 @@
 
 ![Xelt](./logo.png)
 
-# Xelt
+# Xelt.py
+
+[![Required Python Version](https://img.shields.io/badge/Python-3.10%20|%203.11-blue?logo=python&logoColor=white)](https://github.com/XeltBot/Xelt/blob/dev/pyproject.toml) [![GitHub License](https://img.shields.io/badge/License-MIT-green?logo=github)](https://github.com/XeltBot/Xelt/blob/dev/LICENSE) 
 
 A high performance multipurpose discord bot with features ranging from user information to music
 

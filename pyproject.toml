@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">3.8,<4.0"
+python = ">=3.10,<4.0"
 discord-py = {extras = ["voice"], version = "^2.1.0"}
 python-dotenv = "^0.21.0"
 aiodns = "^3.0.0"
