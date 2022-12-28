@@ -4,6 +4,7 @@ from discord.ext import commands
 
 
 # This whole idea was taken from Pycord's Toolkit bot, but modified to work with discord.py
+# This system is also used on Kumiko as well
 class HelpSelect(discord.ui.Select):
     def __init__(self, bot) -> None:
         self.bot = bot
@@ -36,13 +37,14 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    # Precondition: There must be at the very least one cog loaded
     @app_commands.command(name="help")
     async def questionatorHelp(self, interaction: discord.Interaction):
         """Shows all commands available"""
         embed = discord.Embed()
         embed.title = "Help"
         view = discord.ui.View().add_item(HelpSelect(self.bot))
-        await interaction.response.send_message(embed=embed, view=view)
+        await interaction.response.send_message(embed=embed, view=view, ephemeral=True)
 
 
 async def setup(bot):
