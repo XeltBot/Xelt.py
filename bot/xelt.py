@@ -17,6 +17,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 discord.utils.setup_logging(level=logging.INFO, root=False)
+logger = logging.getLogger("discord")
 
 
 async def main():
@@ -29,4 +30,4 @@ if __name__ == "__main__":
         asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
         asyncio.run(main())
     except KeyboardInterrupt:
-        pass
+        logger.info("Shutting down Xelt.py...")

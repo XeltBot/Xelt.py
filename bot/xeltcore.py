@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 from typing import Optional
@@ -17,6 +18,7 @@ class XeltCore(commands.Bot):
     ) -> None:
         super().__init__(intents=intents, command_prefix=command_prefix)
         self.testing_guild_id = testing_guild_id
+        self.logger = logging.getLogger("discord")
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
@@ -25,6 +27,7 @@ class XeltCore(commands.Bot):
         for cog in os.listdir(cogs_path):
             if cog.endswith(".py"):
                 await self.load_extension(f"cogs.{cog[:-3]}")
+                self.logger.debug(f"Loaded Cog: {cog[:-3]}")
 
         # This is needed in order to sync all of the commands to the testing guild.
         if self.testing_guild_id:
