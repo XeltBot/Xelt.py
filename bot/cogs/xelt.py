@@ -61,6 +61,8 @@ class Xelt(commands.Cog):
         # Note that the calculation of the guilds and members may or may not take quite some time
         # discord.py should automatically cache how much guilds and members a bot is in
         uptime = datetime.timedelta(seconds=int(round(time.time() - startTime)))
+        freeMemory = psutil.virtual_memory().used / 1024 / 1024 / 1024
+        totalMemory = psutil.virtual_memory().total / 1024 / 1024 / 1024
         embed = discord.Embed(
             title="Xelt's stats", description=f"```{BUILD_VERSION}```"
         )
@@ -77,7 +79,7 @@ class Xelt(commands.Cog):
         )
         embed.add_field(
             name="System",
-            value=f"```💻 CPU [{os.cpu_count()} Cores]\n🎞 Memory [{(psutil.virtual_memory().used / 1024 / 1024 / 1024):.2f} GB / {(psutil.virtual_memory().total / 1024 / 1024 / 1024):.0f} GB] ```",
+            value=f"```💻 CPU [{os.cpu_count()} Cores]\n🎞 Memory [{freeMemory:.2f} GB / {totalMemory:.0f} GB] ```",
         )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 

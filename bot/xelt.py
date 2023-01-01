@@ -5,6 +5,7 @@ import os
 import discord
 import uvloop
 from dotenv import load_dotenv
+from rich.logging import RichHandler
 from xeltcore import XeltCore
 
 # If there is an .env file, this will load them into the environment
@@ -16,7 +17,9 @@ XELT_TOKEN = os.getenv("XELT_DEV_TOKEN")
 intents = discord.Intents.default()
 intents.message_content = True
 
-discord.utils.setup_logging(level=logging.INFO, root=False)
+FORMATTER = logging.Formatter(fmt="%(message)s", datefmt="[%Y-%m-%d %H:%M:%S]")
+HANDLER = RichHandler(show_path=False)
+discord.utils.setup_logging(handler=HANDLER, formatter=FORMATTER)
 logger = logging.getLogger("discord")
 
 
