@@ -40,7 +40,7 @@ RUN apt update \
 
 # Note that wait-for is being copied over. This will be needed for Docker Compose support later
 WORKDIR /Xelt
-COPY /bot/xelt.py /Xelt/bot/
+COPY /bot/xeltbot.py /Xelt/bot/
 COPY /bot/xeltcore.py /Xelt/bot/
 COPY /bot/cogs /Xelt/bot/cogs/
 COPY /docker/wait-for /Xelt/wait-for

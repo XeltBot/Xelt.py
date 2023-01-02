@@ -60,7 +60,7 @@ class Xelt(commands.Cog):
         """Show bot stats"""
         # Note that the calculation of the guilds and members may or may not take quite some time
         # discord.py should automatically cache how much guilds and members a bot is in
-        uptime = datetime.timedelta(seconds=int(round(time.time() - startTime)))
+        uptime = datetime.timedelta(seconds=int(round(time.time() - startTime)))  # type: ignore
         freeMemory = psutil.virtual_memory().used / 1024 / 1024 / 1024
         totalMemory = psutil.virtual_memory().total / 1024 / 1024 / 1024
         embed = discord.Embed(
