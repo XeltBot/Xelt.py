@@ -13,7 +13,7 @@ class XeltCore(commands.Bot):
     def __init__(
         self,
         intents: discord.Intents,
-        command_prefix: Optional[str] = "!",
+        command_prefix: str = "!",
         testing_guild_id: Optional[int] = None,
     ) -> None:
         super().__init__(intents=intents, command_prefix=command_prefix)

@@ -27,9 +27,17 @@ pytest = "^7.2.0"
 pytest-asyncio = "^0.20.3"
 mypy = "^0.991"
 types-psutil = "^5.9.5.5"
+pyright = "^1.1.286"
 
 [tool.isort]
 profile = 'black'
+
+[tool.pyright]
+include = ["bot/**"]
+exclude = ["**/__pycache__", "**/.mypy_cache", "**/.dmpypy.json"]
+ignore = ["docker"]
+reportMissingImports = true
+reportMissingTypeStubs = false
 
 [build-system]
 requires = ["poetry-core"]

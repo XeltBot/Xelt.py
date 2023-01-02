@@ -5,3 +5,6 @@ run-dev:
 
 mypy:
 	poetry run mypy bot
+
+pyright:
+	poetry run pyright bot

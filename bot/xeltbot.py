@@ -13,7 +13,7 @@ load_dotenv()
 
 # If the ID isn't set to a server, this will propagate the slash commands globally
 DEV_GUILD = discord.Object(id=1057211769216569374)
-XELT_TOKEN = os.getenv("XELT_DEV_TOKEN")
+XELT_TOKEN = os.environ["XELT_DEV_TOKEN"]
 intents = discord.Intents.default()
 intents.message_content = True
 
