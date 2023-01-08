@@ -6,9 +6,7 @@ Make sure to read these guides listed below
 
 - [Installing Requirements](./installing-requirements.md)
 
-## Getting Started
-
-### Design Principles
+## Design Principles
 
 One of the major factors that led to Xelt's downfall is the fundamental lack of design principles. In order to ensure Xelt success, there must be some design principles that should be put in place. There are as listed:
 
@@ -20,4 +18,56 @@ One of the major factors that led to Xelt's downfall is the fundamental lack of 
 
 - **Testing**: There are unit tests set up for a reason... Unit testing and integration testing are 2 of the major building blocks to the success of any project.
 
+## Coding Style
 
+### Variables
+
+Most of the code written uses `camelCasing` for variables, `PascalCasing` for classes, and `snake_casing` for ags. To sum it up:
+
+- `camelCasing` for variables
+- `PascalCasing` for classes
+- `snake_casing` for args
+- `ALL_CAPS` for constants
+- `kebab-casing` for files
+
+### Formatting
+
+Xelt.py uses pre-commit hooks to format all of the code. Make sure run `git add --all` before committing to add all of the files. More than likely you'll need to commit twice due to the formatting that pre-commit does afterwards.
+
+### Docstrings
+
+Just like how major programs are documented, the libraries that are custom made for Xelt.py also have to be documented. The current standard for this project is to use [Google's Docstring format](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings). A handy VS Code extension that should be used is the [autoDocstring](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) extension. By default it will generate the docstring in the Google format. Docstrings should be used on all coroutines and methods (excluding cogs), and on classes as well. 
+
+For Cogs, docstrings formats are not needed. All you need to do is to add a basic docstring and discord.py will pick it up. Additionally for descriptions of slash command parameters, you can also use docstrings and discord.py will pick it up (see https://discordpy.readthedocs.io/en/stable/interactions/api.html#discord.app_commands.describe)
+
+Example Cog:
+
+```py 
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+class MyCog(commands.Cog):
+    """An example cog for demo purposes"""
+    def __init__(self, bot):
+        self.bot = bot
+
+    @app_commands.command(name="help")
+    async def myCommand(self, interaction: discord.Interaction):
+        """This is an example of a description for a slash command"""
+        await interaction.response.send_message(f"Hello {ctx.user.name}!")
+
+async def setup(bot):
+    await bot.add_cog(MyCog(bot))
+```
+
+## GitHub Contributing Guidelines
+
+### Releasing Tags
+In order to automate the release system, you have to make sure that in order to use it, the git commit message must be done correctly. Only use this if there is a new update that is ready to be released. Xelt.py uses [SemVer](https://semver.org/) as the standard for versioning. Here's a table that should help with explaining this:
+
+| Type of Release, Update, or Patch | Example |
+|              :--:                 | :--:    | 
+| Major Release (For updates that are not backwards compatible) | `Release: v2.0.0` | 
+| Minor Release (For updates that are backwards compatible) | `Update: v2.5.0`|
+| Patch Release (For critical security patches and bug fixes) | `Fix: v2.5.1` |

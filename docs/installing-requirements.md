@@ -7,6 +7,7 @@ To get started, you'll need these software installed:
 - [Git](https://git-scm.com/)
 - [Python 3](https://www.python.org/) (Recommended to use Python 3.10)
 - [Poetry](https://python-poetry.org/)
+- [Pyenv](https://github.com/pyenv/pyenv) (Recommended)
 - [WSL2](https://docs.microsoft.com/en-us/windows/wsl/) (If working on Windows)
 - [Docker](https://www.docker.com/) (Use [Docker Engine](https://docs.docker.com/engine/) on Linux, [Docker Desktop](https://www.docker.com/products/docker-desktop/) on Windows/WSL2, MacOS and Linux (beta))
 - Discord Account + Discord App
@@ -14,218 +15,56 @@ To get started, you'll need these software installed:
 > **Note**
 > Xelt v3 is natively developed on Linux. This means that you must have a good understanding on how to use Linux in the terminal. It is recommended to use Ubuntu to start with, but more advanced users may feel more comfortable with other distros such as Arch. If you are using Windows, you must use WSL2.
 
-> **Note**
-> To those who are collaborators on this org, all you need to do is to clone the repo, and push to the main dev branch (`dev/v3`) instead
+## Development Prerequisites
 
-## Windows 
+These are the prerequisites packages for development
 
-1. Install [WSL2](https://docs.microsoft.com/en-us/windows/wsl/) if haven't done so yet. (Note this has to be WSL2, not WSL1) Pick your distro of choice. In this example, we will use Ubuntu 22.04
+### Debian/Ubuntu
 
-2. Install the suggested build dependencies for pyenv. 
-
-    ```sh
-    sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev python3.10-dev git
-    ```
-
-3. Install Pyenv. The script below downloads the automatic installer, which is recommended
-
-    ```sh
-    curl https://pyenv.run | bash
-    ```
-
-4. Follow the rest of the steps to finish installing Pyenv that are listed [here](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv). Once you get to the section where it says to install the Python build dependencies, don't worry. That was literally done in the first step.
-
-5. Now with Pyenv, you can install Python 3.10
-
-    ```sh
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-6. Fork and clone the repo
-
-    ```sh
-    git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
-    ```
-
-    Or if you have the `gh` cli tool installed:
-
-    ```sh
-    gh repo clone [username]/Xelt.py
-    ```
-
-
-7. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
-
-    ```sh
-    make dev-setup
-    ```
-
-## Linux
-    
-### Ubuntu
+```sh 
+sudo apt-get install libffi-dev python3-dev libnacl-dev build-essentials \
+libssl-dev curl wget git
+```
 
 > **Note**
-> `uvloop` requires the `libssl-dev` package. On Ubuntu 22.04, this will install OpenSSL 3.0 instead of OpenSSL 1.1. You'll need to use a backport version of Ubuntu's repos (focal) in order to get access to OpenSSL 1.1. Refer to https://stackoverflow.com/questions/72133316/ubuntu-22-04-libssl-so-1-1-cannot-open-shared-object-file-no-such-file-or-di for more info
+> `uvloop` depends on shared libs from OpenSSL 1.1. You'll need to use the backport versions for Ubuntu 22.04 and higher
 
-    ```sh
-    sudo apt-get update; sudo apt-get install make build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev python3.10-dev git
-    ```
+### RHEL/CentOS/Fedora 22 or below
 
-2. Install Pyenv. The script below downloads the automatic installer, which is recommended
+```sh
+sudo yum install make gcc libffi-devel python-devel \
+openssl-devel curl wget git
+```
+### Fedora 23+
 
-    ```sh
-    curl https://pyenv.run | bash
-    ```
-
-3. Follow the rest of the steps to finish installing Pyenv that are listed [here](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv). Once you get to the section where it says to install the Python build dependencies, don't worry. That was literally done in the first step.
-
-4. Now with Pyenv, you can install Python 3.10
-
-    ```sh
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-5. Fork and clone the repo
-
-    ```sh
-    git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
-    ```
-
-    Or if you have the `gh` cli tool installed:
-
-    ```sh
-    gh repo clone [username]/Xelt.py
-    ```
-
-
-6. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
-
-    ```sh
-    make dev-setup
-    ```
+```sh
+sudo dnf install make automake gcc gcc-c++ kernel-devel \
+libffi-devel python3-libnacl python3.10-devel openssl11-devel \
+openssl-devel curl wget git
+```
 
 ### OpenSUSE
 
-1. Install the suggested build dependencies for pyenv.
-
-    ```sh
-    sudo zypper install gcc automake bzip2 libbz2-devel xz xz-devel openssl-devel openssl-1_1 ncurses-devel \
-    readline-devel zlib-devel tk-devel \
-    libffi-devel sqlite3-devel python310-devel git curl
-    ```
-2. Install Pyenv. The script below downloads the automatic installer, which is recommended
-
-    ```sh
-    curl https://pyenv.run | bash
-    ```
-
-3. Follow the rest of the steps to finish installing Pyenv that are listed [here](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv). Once you get to the section where it says to install the Python build dependencies, don't worry. That was literally done in the first step.
-
-4. Now with Pyenv, you can install Python 3.10
-
-    ```sh
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-5. Fork and clone the repo
-
-    ```sh
-    git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
-    ```
-
-    Or if you have the `gh` cli tool installed:
-
-    ```sh
-    gh repo clone [username]/Xelt.py
-    ```
-
-6. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
-
-    ```sh
-    make dev-setup
-    ```
-
-### Fedora/CentOS
-
-1. Install the suggested build dependencies for pyenv
-
-    Fedora 22 and above:
-
-    ```sh
-    sudo dnf install make gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel python-devel git curl openssl11-devel
-    ```
-
-    CentOS or Fedora 22 and below:
-
-    ```sh
-    sudo yum install gcc zlib-devel bzip2 bzip2-devel readline-devel sqlite sqlite-devel openssl-devel tk-devel libffi-devel xz-devel python-devel git curl
-    ```
-
-2. Install Pyenv. The script below downloads the automatic installer, which is recommended
-
-    ```sh
-    curl https://pyenv.run | bash
-    ```
-
-3. Follow the rest of the steps to finish installing Pyenv that are listed [here](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv). Once you get to the section where it says to install the Python build dependencies, don't worry. That was literally done in the first step.
-
-4. Now with Pyenv, you can install Python 3.10
-
-    ```sh
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-5. Fork and clone the repo
-
-    ```sh
-    git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
-    ```
-
-    Or if you have the `gh` cli tool installed:
-
-    ```sh
-    gh repo clone [username]/Xelt.py
-    ```
-
-
-6. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
-
-    ```sh
-    make dev-setup
-    ```
+```sh
+sudo zypper install gcc make automake openssl-devel openssl-1_1  \
+libffi-devel python310-devel python310-libnacl wget git curl
+```
 
 ### Arch
 
-1. Install the suggested build dependencies for pyenv
+```sh
+sudo pacman -S --needed base-devel openssl openssl-1.1 libffi python python-libnacl
+```
 
-    ```sh
-    sudo pacman -S --needed base-devel openssl openssl-1.1 zlib xz tk python libffi
-    ```
+### MacOS/Homebrew
 
-2. Install Pyenv. The script below downloads the automatic installer, which is recommended
+```sh
+brew install openssl openssl@1.1 libffi git curl make
+```
 
-    ```sh
-    curl https://pyenv.run | bash
-    ```
+## Development Setup
 
-3. Follow the rest of the steps to finish installing Pyenv that are listed [here](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv). Once you get to the section where it says to install the Python build dependencies, don't worry. That was literally done in the first step.
-
-4. Now with Pyenv, you can install Python 3.10
-
-    ```sh
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-5. Fork and clone the repo
+1. Fork and clone the repo
 
     ```sh
     git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
@@ -237,53 +76,15 @@ To get started, you'll need these software installed:
     gh repo clone [username]/Xelt.py
     ```
 
+    > **Note**
+    > To those who are collaborators on this org, all you need to do is to clone the repo, and push to the main dev branch (`dev/v3`) instead
 
-6. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
 
-    ```sh
-    make dev-setup
-    ```
-
-## MacOS
-
-1. Install Xcode Command Line Tools (`xcode-select --install`) and [Homebrew](https://brew.sh/)
-
-2. Install the suggested build dependencies for pyenv
-
-    ```sh
-    brew install openssl readline sqlite3 xz zlib tcl-tk git curl make
-    ```
-3. Install Pyenv via Homebrew
-
-    ```sh
-    brew update
-    brew install pyenv
-    ```
-
-4. Install Python 3.10
-
-    ```sh
-    pyenv update
-    pyenv install 3.10:latest
-    pyenv rehash
-    ```
-
-5. Follow the rest of the steps, starting on [Set Up Your shell Environment For Pyenv](https://github.com/pyenv/pyenv#set-up-your-shell-environment-for-pyenv)
-
-5. Fork and clone the repo
-
-    ```sh
-    git clone https://github.com/[username]/Xelt.py.git && cd Xelt.py
-    ```
-
-    Or if you have the `gh` cli tool installed:
-
-    ```sh
-    gh repo clone [username]/Xelt.py
-    ```
-
-6. Run Make to create the venv and install dependencies
+2. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
 
     ```sh
     make dev-setup
     ```
+
+    > **Note**
+    > To those developing on Windows, you'll need to use WSL2 for most of these. Once you have WSL2 installed and configured, install the dependencies for your distro, and then follow the steps here.
