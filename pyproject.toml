@@ -19,7 +19,7 @@ orjson = "^3.8.4"
 ormsgpack = "^1.2.4"
 coredis = "^4.10.2"
 ciso8601 = "^2.3.0"
-rich = "^13.0.0"
+rich = "^13.0.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^2.21.0"
