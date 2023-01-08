@@ -23,7 +23,7 @@ WORKDIR /Xelt
 COPY /pyproject.toml /Xelt/
 COPY /poetry.lock /Xelt/
 
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes \
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --without=dev \
   && pip wheel --wheel-dir=/Xelt/wheels -r requirements.txt
 
 ####################################################################################################
