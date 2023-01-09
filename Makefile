@@ -8,3 +8,6 @@ mypy:
 
 pyright:
 	poetry run pyright bot
+
+tests:
+	poetry run pytest tests/redis --asyncio-mode auto

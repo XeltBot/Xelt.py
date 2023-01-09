@@ -28,6 +28,7 @@ pytest-asyncio = "^0.20.3"
 mypy = "^0.991"
 pyright = "^1.1.286"
 types-psutil = "^5.9.5.5"
+tox = "^4.2.6"
 
 [tool.isort]
 profile = 'black'

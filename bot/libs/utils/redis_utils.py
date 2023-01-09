@@ -1,4 +1,6 @@
-from coredis import Connection, ConnectionPool
+from typing import Union
+
+from coredis import ConnectionPool
 
 
 class RedisClient(object):
@@ -16,6 +18,7 @@ class RedisClient(object):
         self.port = port
         self.max_connections = max_connections
         self.db = db
+        self.shared_connection_pool = None
 
     async def connect(self) -> ConnectionPool:
         """Connects to the Redis server, and automatically created a single connection pool
@@ -23,10 +26,20 @@ class RedisClient(object):
         Returns:
             coredis.ConnectionPool: The ConnectionPool class that can be used to access it
         """
-        connDetails = Connection(
-            host=self.host, port=self.port, db=self.db, decode_responses=False
+        connPool = ConnectionPool(max_connections=self.max_connections).from_url(
+            url=f"redis://@{self.host}:{self.port}/{self.db}?decode_responses=False"
         )
-        connPool = ConnectionPool(
-            connection_class=connDetails, max_connections=self.max_connections
-        )
+        self.shared_connection_pool = connPool
         return connPool
+
+    async def disconnect(self) -> None:
+        """Closes all Redis connections in the pool"""
+        self.shared_connection_pool.disconnect()  # type: ignore
+
+    def getConnPool(self) -> Union[ConnectionPool, None]:
+        """Gets the current ConnectionPool obj
+
+        Returns:
+            Union[ConnectionPool, None]: Current `ConnectionPool` obj or None if not set
+        """
+        return self.shared_connection_pool
