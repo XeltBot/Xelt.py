@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 
+import orjson
 import pytest
 
 path = Path(__file__).parents[2]
@@ -27,3 +28,21 @@ async def test_basic_cache():
     key = CommandKeyBuilder(id=None, command=None)
     await cache.setBasicCache(value=DATA)
     assert await cache.getBasicCache(key) == DATA  # nosec
+
+
+@pytest.mark.asyncio
+async def test_basic_cache_type():
+    DATA = "Hello World!"
+    cache = XeltCache()
+    key = CommandKeyBuilder(id=None, command=None)
+    await cache.setBasicCache(value=DATA)
+    assert isinstance(await cache.getBasicCache(key), str)  # nosec
+
+
+@pytest.mark.asyncio
+async def test_basic_cache_content():
+    DATA = "{'message': 'Hello World!'}"
+    cache = XeltCache()
+    key = CommandKeyBuilder(id=None, command="basic_cache_content")
+    await cache.setBasicCache(value=DATA)
+    assert orjson.loads(await cache.getBasicCache(key)) == DATA  # nosec

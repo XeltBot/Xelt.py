@@ -18,7 +18,7 @@ class RedisClient(object):
         self.port = port
         self.max_connections = max_connections
         self.db = db
-        self.shared_connection_pool = None
+        self.shared_connection_pool = {"connPool": None}
 
     async def connect(self) -> ConnectionPool:
         """Connects to the Redis server, and automatically created a single connection pool
@@ -29,12 +29,12 @@ class RedisClient(object):
         connPool = ConnectionPool(max_connections=self.max_connections).from_url(
             url=f"redis://@{self.host}:{self.port}/{self.db}?decode_responses=False"
         )
-        self.shared_connection_pool = connPool
+        self.shared_connection_pool = {"connPool": connPool}
         return connPool
 
     async def disconnect(self) -> None:
         """Closes all Redis connections in the pool"""
-        self.shared_connection_pool.disconnect()  # type: ignore
+        self.shared_connection_pool["connPool"].disconnect()  # type: ignore
 
     def getConnPool(self) -> Union[ConnectionPool, None]:
         """Gets the current ConnectionPool obj
@@ -42,4 +42,4 @@ class RedisClient(object):
         Returns:
             Union[ConnectionPool, None]: Current `ConnectionPool` obj or None if not set
         """
-        return self.shared_connection_pool
+        return self.shared_connection_pool["connPool"]

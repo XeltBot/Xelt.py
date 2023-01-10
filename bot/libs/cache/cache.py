@@ -38,7 +38,7 @@ class XeltCache:
         conn = Redis(connection_pool=connPool)
         await conn.set(key=key, value=ormsgpack.packb(value), ex=ttl)
 
-    async def getBasicCache(self, key: str) -> Union[str, None]:
+    async def getBasicCache(self, key: str) -> str:
         """Gets the basic command cache from Redis
 
         Args:
@@ -48,4 +48,4 @@ class XeltCache:
             str: _description_
         """
         conn = Redis(connection_pool=RedisClient().getConnPool())
-        return ormsgpack.unpackb(await conn.get(key))  # type: ignore
+        return ormsgpack.unpackb(await conn.get(key), option=ormsgpack.OPT_NON_STR_KEYS)  # type: ignore
