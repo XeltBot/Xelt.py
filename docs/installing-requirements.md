@@ -5,9 +5,9 @@
 To get started, you'll need these software installed:
 
 - [Git](https://git-scm.com/)
-- [Python 3](https://www.python.org/) (Recommended to use Python 3.10)
+- [Python 3](https://www.python.org/) (Python 3.10 and 3.11 are officially supported)
 - [Poetry](https://python-poetry.org/)
-- [Pyenv](https://github.com/pyenv/pyenv) (Recommended)
+- [Pyenv](https://github.com/pyenv/pyenv) (Optional, Recommended)
 - [WSL2](https://docs.microsoft.com/en-us/windows/wsl/) (If working on Windows)
 - [Docker](https://www.docker.com/) (Use [Docker Engine](https://docs.docker.com/engine/) on Linux, [Docker Desktop](https://www.docker.com/products/docker-desktop/) on Windows/WSL2, MacOS and Linux (beta))
 - Discord Account + Discord App
