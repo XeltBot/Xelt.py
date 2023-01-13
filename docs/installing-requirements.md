@@ -5,7 +5,7 @@
 To get started, you'll need these software installed:
 
 - [Git](https://git-scm.com/)
-- [Python 3](https://www.python.org/) (Python 3.10 and 3.11 are officially supported)
+- [Python 3](https://www.python.org/) (Python 3.10 is what the codebase uses)
 - [Poetry](https://python-poetry.org/)
 - [Pyenv](https://github.com/pyenv/pyenv) (Optional, Recommended)
 - [WSL2](https://docs.microsoft.com/en-us/windows/wsl/) (If working on Windows)
@@ -88,3 +88,9 @@ brew install openssl openssl@1.1 libffi git curl make
 
     > **Note**
     > To those developing on Windows, you'll need to use WSL2 for most of these. Once you have WSL2 installed and configured, install the dependencies for your distro, and then follow the steps here.
+
+3. Start the Docker Compose stack
+
+    ```sh
+    sudo docker compose -f docker-compose-dev.yml up -d
+    ```
