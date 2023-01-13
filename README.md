@@ -4,7 +4,7 @@
 
 # Xelt.py
 
-[![Required Python Version](https://img.shields.io/badge/Python-3.10%20|%203.11-blue?logo=python&logoColor=white)](https://github.com/XeltBot/Xelt/blob/dev/pyproject.toml) [![Docker Build](https://github.com/XeltBot/Xelt.py/actions/workflows/docker-build.yml/badge.svg)](https://github.com/XeltBot/Xelt.py/actions/workflows/docker-build.yml) [![GitHub License](https://img.shields.io/badge/License-MIT-green?logo=github)](https://github.com/XeltBot/Xelt/blob/dev/LICENSE) 
+[![Required Python Version](https://img.shields.io/badge/Python-3.10%20|%203.11-blue?logo=python&logoColor=white)](https://github.com/XeltBot/Xelt/blob/dev/pyproject.toml) [![Docker Build](https://github.com/XeltBot/Xelt.py/actions/workflows/docker-build.yml/badge.svg)](https://github.com/XeltBot/Xelt.py/actions/workflows/docker-build.yml) [![Lint](https://github.com/XeltBot/Xelt.py/actions/workflows/lint.yml/badge.svg)](https://github.com/XeltBot/Xelt.py/actions/workflows/lint.yml) [![Tests](https://github.com/XeltBot/Xelt.py/actions/workflows/tests.yml/badge.svg)](https://github.com/XeltBot/Xelt.py/actions/workflows/tests.yml) [![GitHub License](https://img.shields.io/badge/License-MIT-green?logo=github)](https://github.com/XeltBot/Xelt/blob/dev/LICENSE) 
 
 A high performance multipurpose discord bot with features ranging from user information to music
 

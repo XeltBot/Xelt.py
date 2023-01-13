@@ -5,4 +5,5 @@ __pycache__
 .mypy_cache
 .dmypy.json
 .pytest_cache
+.tox
 test-scripts
