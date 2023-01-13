@@ -1655,6 +1655,7 @@ files = [
 [package.dependencies]
 commonmark = ">=0.9.0,<0.10.0"
 pygments = ">=2.6.0,<3.0.0"
+typing-extensions = {version = ">=4.0.0,<5.0", markers = "python_version < \"3.9\""}
 
 [package.extras]
 jupyter = ["ipywidgets (>=7.5.1,<8.0.0)"]
@@ -1994,5 +1995,5 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.10,<4.0"
-content-hash = "b04fc9de7b801323e855d3ca70213032643c46cb71707b2617fa754d17c391bd"
+python-versions = ">=3.8,<4"
+content-hash = "5ea342ed2068b36a0a08a8fec2c1e6bbaa6f98d0802759666a43e7c95e464ddb"

@@ -1,7 +1,7 @@
 all: run-dev
 
 run-dev:
-	poetry run python bot/xelt.py
+	poetry run python bot/xeltbot.py
 
 mypy:
 	poetry run mypy bot

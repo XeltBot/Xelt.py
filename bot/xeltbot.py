@@ -1,9 +1,8 @@
-import asyncio
 import logging
 import os
 
 import discord
-import uvloop
+from anyio import run
 from dotenv import load_dotenv
 from rich.logging import RichHandler
 from xeltcore import XeltCore
@@ -30,7 +29,6 @@ async def main():
 
 if __name__ == "__main__":
     try:
-        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-        asyncio.run(main())
+        run(main, backend_options={"use_uvloop": True})
     except KeyboardInterrupt:
         logger.info("Shutting down Xelt.py...")

@@ -1,9 +1,8 @@
 import logging
-import os
-from pathlib import Path
 from typing import Optional
 
 import discord
+from anyio import Path
 from discord.ext import commands
 
 
@@ -22,12 +21,10 @@ class XeltCore(commands.Bot):
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
-        path = Path(__file__).parent
-        cogs_path = path / "cogs"
-        for cog in os.listdir(cogs_path):
-            if cog.endswith(".py"):
-                await self.load_extension(f"cogs.{cog[:-3]}")
-                self.logger.debug(f"Loaded Cog: {cog[:-3]}")
+        cogsPath = Path(__file__).parent.joinpath("cogs")
+        async for cog in cogsPath.rglob("*.py"):
+            self.logger.debug(f"Loaded Cog: {cog.name[:-3]}")
+            await self.load_extension(f"cogs.{cog.name[:-3]}")
 
         # This is needed in order to sync all of the commands to the testing guild.
         if self.testing_guild_id:
