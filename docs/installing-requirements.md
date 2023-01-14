@@ -22,7 +22,7 @@ These are the prerequisites packages for development
 ### Debian/Ubuntu
 
 ```sh 
-sudo apt-get install libffi-dev python3-dev libnacl-dev build-essentials \
+sudo apt-get install libffi-dev python3-dev libnacl-dev libopus-dev libopus0 libopusenc-dev build-essentials \
 libssl-dev curl wget git
 ```
 
@@ -33,33 +33,33 @@ libssl-dev curl wget git
 
 ```sh
 sudo yum install make gcc libffi-devel python-devel \
-openssl-devel curl wget git
+openssl-devel opus-devel opus curl wget git
 ```
 ### Fedora 23+
 
 ```sh
 sudo dnf install make automake gcc gcc-c++ kernel-devel \
 libffi-devel python3-libnacl python3.10-devel openssl11-devel \
-openssl-devel curl wget git
+openssl-devel opus opus-devel curl wget git
 ```
 
 ### OpenSUSE
 
 ```sh
 sudo zypper install gcc make automake openssl-devel openssl-1_1  \
-libffi-devel python310-devel python310-libnacl wget git curl
+libffi-devel python310-devel python310-libnacl opus libopus0 wget git curl
 ```
 
 ### Arch
 
 ```sh
-sudo pacman -S --needed base-devel openssl openssl-1.1 libffi python python-libnacl
+sudo pacman -S --needed base-devel openssl openssl-1.1 libffi python python-libnacl opus
 ```
 
 ### MacOS/Homebrew
 
 ```sh
-brew install openssl openssl@1.1 libffi git curl make
+brew install openssl openssl@1.1 libffi git curl make opus
 ```
 
 ## Development Setup
