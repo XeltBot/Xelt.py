@@ -35,7 +35,7 @@ class XeltCache:
             ttl (Optional[int], optional): The time to live of the key. Defaults to 5.
         """
         connPool = RedisClient().getConnPool()
-        conn = Redis(connection_pool=connPool)
+        conn = Redis(connection_pool=connPool, protocol_version=2)
         await conn.set(key=key, value=ormsgpack.packb(value), ex=ttl)
 
     async def getBasicCache(self, key: str) -> str:
@@ -47,5 +47,5 @@ class XeltCache:
         Returns:
             str: _description_
         """
-        conn = Redis(connection_pool=RedisClient().getConnPool())
+        conn = Redis(connection_pool=RedisClient().getConnPool(), protocol_version=2)
         return ormsgpack.unpackb(await conn.get(key), option=ormsgpack.OPT_NON_STR_KEYS)  # type: ignore

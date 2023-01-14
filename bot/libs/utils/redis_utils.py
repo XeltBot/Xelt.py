@@ -34,7 +34,7 @@ class RedisClient:
         self.conn_pool = connPool
         return connPool
 
-    async def disconnect(self) -> None:
+    def disconnect(self) -> None:
         """Closes all Redis connections in the pool"""
         self.conn_pool.disconnect()
 
