@@ -17,7 +17,7 @@ class XeltCore(commands.Bot):
     ) -> None:
         super().__init__(intents=intents, command_prefix=command_prefix)
         self.testing_guild_id = testing_guild_id
-        self.logger = logging.getLogger("discord")
+        self.logger = logging.getLogger("xeltbot")
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""

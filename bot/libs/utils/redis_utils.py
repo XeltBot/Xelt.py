@@ -1,3 +1,4 @@
+import logging
 from typing import Union
 
 from coredis import ConnectionPool
@@ -21,6 +22,7 @@ class RedisClient:
         self.max_connections = max_connections
         self.db = db
         self.conn_pool = ConnectionPool(*args, **kwargs)
+        self.logger = logging.getLogger("discord")
 
     async def connect(self) -> ConnectionPool:
         """Connects to the Redis server, and automatically created a single connection pool

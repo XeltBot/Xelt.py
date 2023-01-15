@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+from typing import AsyncGenerator
 
 from .redis_utils import RedisClient
 
@@ -6,7 +7,7 @@ from .redis_utils import RedisClient
 @asynccontextmanager
 async def RedisPoolCM(
     host: str = "127.0.0.1", port: int = 6379, max_connections: int = 25, db: int = 0
-) -> RedisClient:
+) -> AsyncGenerator:
     """Async context manager that creates a Redis connection pool and closes it when done
 
     Args:

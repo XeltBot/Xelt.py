@@ -10,6 +10,10 @@ from xeltcore import XeltCore
 # If there is an .env file, this will load them into the environment
 load_dotenv()
 
+# Add the constants here
+REDIS_HOST = os.environ["REDIS_HOST"]
+REDIS_PORT = os.environ["REDIS_PORT"]
+
 # If the ID isn't set to a server, this will propagate the slash commands globally
 DEV_GUILD = discord.Object(id=1057211769216569374)
 XELT_TOKEN = os.environ["XELT_DEV_TOKEN"]
