@@ -10,9 +10,7 @@ on:
       - dev/v3
       - main
 
-env:
-  MYPYPATH: bot/libs
-  
+
 jobs: 
   Analyze:
     name: Analyze
@@ -53,5 +51,6 @@ jobs:
           make mypy
           
       - name: Run Pyright
-        run:
+        run: |
+          export MYPYPATH=bot/libs
           make pyright
