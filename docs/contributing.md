@@ -34,6 +34,13 @@ Most of the code written uses `camelCasing` for variables, `PascalCasing` for cl
 
 Xelt.py uses pre-commit hooks to format all of the code. Make sure run `git add --all` before committing to add all of the files. More than likely you'll need to commit twice due to the formatting that pre-commit does afterwards.
 
+### Type Checking
+
+**Xelt.py is statically typed.** Xelt.py is type checked against both mypy and pyright. If you are using VS Code, it is recommended to turn on basic type checking for Python. This basic type checking feature uses pyright under the hood. If you are not using VS Code, you can occasionally run `pyright bot` to type check the code. It's also recommended to use [Mypy daemon](https://mypy.readthedocs.io/en/stable/mypy_daemon.html) to speed up performance when type checking.
+
+> **Note**
+> On Neovim, if you decide to use LSP, pyright will be used to statically type check the code.
+
 ### Docstrings
 
 Just like how major programs are documented, the libraries that are custom made for Xelt.py also have to be documented. The current standard for this project is to use [Google's Docstring format](https://google.github.io/styleguide/pyguide.html#s3.8-comments-and-docstrings). A handy VS Code extension that should be used is the [autoDocstring](https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring) extension. By default it will generate the docstring in the Google format. Docstrings should be used on all coroutines and methods (excluding cogs), and on classes as well. 
