@@ -40,10 +40,25 @@ jobs:
       - name: Set up Poetry
         uses: Gr1N/setup-poetry@v8
 
-      - name: Install tox
+      - name: Cache Poetry
+        id: cache-poetry
+        uses: actions/cache@v3.2.2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-v3-${{ hashFiles('**/poetry.lock') }}
+          
+      - name: Install Poetry Dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
-          pip install --upgrade tox
+          poetry install --with=dev
+
+      - name: Install Nox
+        run: |
+          pip install --upgrade nox
 
       - name: Run Tests
         run:
-          tox run -e py${{ matrix.version }} -- --asyncio-mode auto
+          # tox run -e py${{ matrix.version }} -- --asyncio-mode auto
+          RAW_PYTHON_VERSION=${{ matrix.version }}
+          PYTHON_VERSION=$(echo $RAW_PYTHON_VERSION | sed 's/\.//')
+          nox --sessions test$PYTHON_VERSION
