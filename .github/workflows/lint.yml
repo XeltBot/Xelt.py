@@ -52,5 +52,4 @@ jobs:
           
       - name: Run Pyright
         run: |
-          export MYPYPATH=bot/libs
           make pyright

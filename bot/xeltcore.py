@@ -4,8 +4,9 @@ from typing import Optional
 import discord
 from anyio import Path
 from discord.ext import commands
-from libs.cache import RedisConnPoolCache
 from redis.asyncio.connection import Connection, ConnectionPool
+
+from bot.libs.cache import RedisConnPoolCache
 
 
 class XeltCore(commands.Bot):
