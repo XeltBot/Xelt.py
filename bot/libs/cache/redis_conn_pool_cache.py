@@ -1,4 +1,4 @@
-from typing import List, Literal
+from typing import List, Literal, Union
 
 from redis.asyncio.connection import ConnectionPool
 
@@ -6,7 +6,10 @@ from .base_cache import BaseRedisCache
 
 
 class RedisConnPoolCache(BaseRedisCache):
-    """Caching system used to internally cache Redis connection pools"""
+    """Caching system used to internally cache Redis connection pools (in-memory)
+
+    *Note: The expected `ConnectionPool` object is `redis.asyncio.connection.ConnectionPool`
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -49,7 +52,7 @@ class RedisConnPoolCache(BaseRedisCache):
         """
         return await self._exists(key=key)
 
-    async def getConnPool(self, key: str) -> object:
+    async def getConnPool(self, key: str) -> Union[ConnectionPool, None]:
         """Gets a connection pool object from the cache
 
         Args:
@@ -60,7 +63,7 @@ class RedisConnPoolCache(BaseRedisCache):
         """
         return await self._get(key=key)
 
-    async def getAllConnPool(self) -> List[object]:
+    async def getAllConnPool(self) -> List[ConnectionPool]:
         """Gets all connection pool object from the cache
 
         Args:

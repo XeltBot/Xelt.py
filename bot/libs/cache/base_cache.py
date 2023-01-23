@@ -1,5 +1,7 @@
 import asyncio
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, Union
+
+from redis.asyncio.connection import ConnectionPool
 
 
 class BaseRedisCache:
@@ -10,64 +12,62 @@ class BaseRedisCache:
 
     # Totally didn't rip the most of it off from aiocache
     def __init__(self) -> None:
-        self._cache: Dict[str, object] = {}
+        self._cache: Dict[str, ConnectionPool] = {}
         self._handlers: Dict[str, asyncio.TimerHandle] = {}
 
-    async def _get(self, key: str) -> object:
+    async def _get(self, key: str) -> Union[ConnectionPool, None]:
         """Gets the value from a key in the internal memory cache
 
         Returns:
-            object: The current object in the cache
+            Union[ConnectionPool, None]: If the key exists, it will return the `ConnectionPool` object.
+            Otherwise it will return `None`
         """
         return self._cache.get(key)
 
-    async def _getAll(self, keys: List) -> List[object]:
+    async def _getAll(self, keys: List[str]) -> List[Union[ConnectionPool, None]]:
         """Gets all the values from the internal memory cache
 
         Args:
-            keys (List): List of keys to get
+            keys (List[str]): List of keys to get
 
         Returns:
-            List[object]: The list of objects to return
+            List[Union[ConnectionPool, None]]: List of `ConnectionPool` objects or `None`
         """
         return [self._cache.get(key) for key in keys]
 
-    async def _listAll(self) -> List[object]:
+    async def _listAll(self) -> List[ConnectionPool]:
         """Gets all the values from the internal memory cache
 
-        Args:
-            keys (List): List of keys to get
-
         Returns:
-            List[object]: The list of objects to return
+            List[ConnectionPool]: A list full of current connection pools
         """
         return list(self._cache.values())
 
-    async def _set(self, key: str, value: object) -> bool:
+    async def _set(self, key: str, value: ConnectionPool) -> Literal[True]:
         """Sets a key in the internal memory cache
 
         Args:
             key (str): The key to set
-            value (object): The value to set
+            value (ConnectionPool): The value to set
 
         Returns:
-            bool: Always returns `True`, since it will always be set
+            Literal[True]: Always returns `True`, since it will always be set
         """
         self._cache[key] = value
         return True
 
-    async def _add(self, key: str, value: object) -> bool:
+    async def _add(self, key: str, value: ConnectionPool) -> Literal[True]:
         """Adds a key in the internal memory cache
 
         Args:
             key (str): The key to set
-            value (str): The value to set
+            value (ConnectionPool): `ConnectionPool` object to set
 
         Raises:
             ValueError: If the key is already in the cache
 
         Returns:
-            bool: When the key has been successfully added
+            Literal[True]: Always returns `True`, since it will always be set
         """
         if key in self._cache:
             raise ValueError(

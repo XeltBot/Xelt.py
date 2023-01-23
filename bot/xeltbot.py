@@ -12,7 +12,7 @@ load_dotenv()
 
 # Add the constants here
 REDIS_HOST = os.environ["REDIS_HOST"]
-REDIS_PORT = os.environ["REDIS_PORT"]
+REDIS_PORT = int(os.environ["REDIS_PORT"])
 
 # If the ID isn't set to a server, this will propagate the slash commands globally
 DEV_GUILD = discord.Object(id=1057211769216569374)
@@ -27,7 +27,12 @@ logger = logging.getLogger("discord")
 
 
 async def main():
-    async with XeltCore(intents=intents, testing_guild_id=DEV_GUILD.id) as bot:
+    async with XeltCore(
+        intents=intents,
+        redis_host=REDIS_HOST,
+        redis_port=REDIS_PORT,
+        testing_guild_id=DEV_GUILD.id,
+    ) as bot:
         await bot.start(XELT_TOKEN)
 
 

@@ -1,8 +1,8 @@
 from typing import Optional, Union
 
 import ormsgpack
-from coredis import Redis
-from utils import RedisClient
+import redis.asyncio as redis
+from redis.asyncio.connection import ConnectionPool
 
 from .key_builder import CommandKeyBuilder
 
@@ -10,21 +10,33 @@ from .key_builder import CommandKeyBuilder
 class XeltCache:
     """Xeltpy's custom caching utils. Uses Redis as the backend"""
 
-    def __init__(self, host: str = "127.0.0.1", port: int = 6379) -> None:
+    def __init__(self, connection_pool: ConnectionPool) -> None:
         """Xeltpy's custom caching utils. Uses Redis as the backend
 
         Args:
-            host (str, optional): Redis Host. Defaults to "127.0.0.1".
-            port (int, optional): Redis Port. Defaults to 6379.
+            connection_pool (ConnectionPool): The connection pool to use. This should be normally obtained from `RedisConnPoolCache.getConnPool("_")`
         """
         self.self = self
-        self.host = host
-        self.port = port
+        self.connection_pool: ConnectionPool = connection_pool
+        self.redisConn: redis.Redis = redis.Redis(connection_pool=self.connection_pool)
+
+    def defaultKey(self, key: Optional[str]) -> str:
+        """Determines whether to use the default `CommandKeyBuilder` str or not
+
+        Args:
+            key (Optional[str]): The key to be stored in Redis. Defaults to CommandKeyBuilder(id=None, command=None).
+
+        Returns:
+            str: The default key
+        """
+        if key is None:
+            key = CommandKeyBuilder(id=None, command=None)
+        return key
 
     async def setBasicCache(
         self,
+        key: Optional[str],
         value: Union[str, bytes],
-        key: str = CommandKeyBuilder(id=None, command=None),
         ttl: Optional[int] = 5,
     ) -> None:
         """Sets a basic cache to Redis. This is using the type `str` for the data type
@@ -32,20 +44,22 @@ class XeltCache:
         Args:
             value (Union[str, bytes]): The value to be stored in Redis
             key (Optional[str], optional): The key to be stored in Redis. Defaults to CommandKeyBuilder(id=None, command=None).
-            ttl (Optional[int], optional): The time to live of the key. Defaults to 5.
+            ttl (Optional[int], optional): The time (in seconds) that the key will exist. Basically the TTL. Defaults to 5.
         """
-        connPool = RedisClient().getConnPool()
-        conn = Redis(connection_pool=connPool, protocol_version=2)
-        await conn.set(key=key, value=ormsgpack.packb(value), ex=ttl)
+        await self.redisConn.set(
+            name=self.defaultKey(key=key), value=ormsgpack.packb(value), ex=ttl
+        )
 
-    async def getBasicCache(self, key: str) -> str:
+    async def getBasicCache(self, key: str) -> Union[str, None]:
         """Gets the basic command cache from Redis
 
         Args:
-            key (str):
+            key (str): Redis key to look for. Consult `CommandKeyBuilder` for more info.
 
         Returns:
-            str: _description_
+            Union[str, None]: The value of the key. If not found, returns `None`
         """
-        conn = Redis(connection_pool=RedisClient().getConnPool(), protocol_version=2)
-        return ormsgpack.unpackb(await conn.get(key), option=ormsgpack.OPT_NON_STR_KEYS)  # type: ignore
+        getValue = await self.redisConn.get(key)
+        if getValue is None:
+            return None
+        return ormsgpack.unpackb(getValue)  # type: ignore

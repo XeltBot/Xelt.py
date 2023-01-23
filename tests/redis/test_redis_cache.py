@@ -1,4 +1,3 @@
-import asyncio
 import os
 import sys
 from pathlib import Path
@@ -9,30 +8,31 @@ path = Path(__file__).parents[2]
 packagePath = os.path.join(str(path), "bot", "libs")
 sys.path.append(packagePath)
 
-from cache import CommandKeyBuilder, XeltCache
-from utils import RedisClient
+from cache import CommandKeyBuilder, RedisConnPoolCache, XeltCache
+from redis.asyncio.connection import ConnectionPool
 
-
-@pytest.fixture(autouse=True, scope="session")
-def setup():
-    connPool = asyncio.run(RedisClient().connect())
-    yield connPool
-    connPool.disconnect()
+DATA = "Hello World!"
 
 
 @pytest.mark.asyncio
 async def test_basic_cache():
-    DATA = "Hello World!"
-    cache = XeltCache()
     key = CommandKeyBuilder(id=None, command=None)
-    await cache.setBasicCache(value=DATA)
-    assert await cache.getBasicCache(key) == DATA  # nosec
+    connPool = ConnectionPool.from_url("redis://localhost:6379/0")
+    cache = XeltCache(connection_pool=connPool)
+    await cache.setBasicCache(key=key, value=DATA)
+    res = await cache.getBasicCache(key)
+    assert (res == DATA) and (isinstance(res, str))  # nosec
 
 
 @pytest.mark.asyncio
-async def test_basic_cache_type():
-    DATA = "Hello World!"
-    cache = XeltCache()
+async def test_basic_cache_from_mem():
+    memCache = RedisConnPoolCache()
     key = CommandKeyBuilder(id=None, command=None)
-    await cache.setBasicCache(value=DATA)
-    assert isinstance(await cache.getBasicCache(key), str)  # nosec
+    connPool = ConnectionPool.from_url("redis://localhost:6379/0")
+    await memCache.addConnPool(key="_", conn_pool_obj=connPool)
+    getConnPool = await memCache.getConnPool(key="_")
+    if getConnPool is None:
+        raise ValueError("Unable to get connection pool from memory cache")
+    cache = XeltCache(connection_pool=getConnPool)
+    await cache.setBasicCache(key=key, value=DATA)
+    assert await cache.getBasicCache(key) == DATA  # nosec
