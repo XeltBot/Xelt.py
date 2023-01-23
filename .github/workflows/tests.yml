@@ -44,7 +44,6 @@ jobs:
         run: |
           pip install --upgrade nox
 
-      # tox run -e py${{ matrix.version }} -- --asyncio-mode auto
       - name: Run Tests
         run: |
           RAW_PYTHON_VERSION=${{ matrix.version }}

@@ -80,10 +80,10 @@ brew install openssl openssl@1.1 libffi git curl make opus
     > To those who are collaborators on this org, all you need to do is to clone the repo, and push to the main dev branch (`dev/v3`) instead
 
 
-2. Run `make` to create the venv and install dependencies. This will do any needed setup as well.
+2. Install all of the dependencies (including dev dependencies)
 
     ```sh
-    make dev-setup
+    poetry install --with=dev
     ```
 
     > **Note**
