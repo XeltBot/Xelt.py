@@ -5,7 +5,7 @@ import discord
 from anyio import run
 from dotenv import load_dotenv
 from rich.logging import RichHandler
-from xeltcore import XeltCore
+from xeltcore import XeltCore  # type: ignore
 
 # If there is an .env file, this will load them into the environment
 load_dotenv()
