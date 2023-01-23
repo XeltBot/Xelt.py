@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Literal
 
 from redis.asyncio.connection import ConnectionPool
 
@@ -82,7 +82,7 @@ class RedisConnPoolCache(BaseRedisCache):
         """
         return await self._delete(key=key)
 
-    async def clearConnPool(self, namespace=None) -> bool:
+    async def clearConnPool(self, namespace=None) -> Literal[True]:
         """Clears out the cache
 
         Args:

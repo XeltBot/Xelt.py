@@ -1,5 +1,5 @@
 import asyncio
-from typing import Dict, List, Optional
+from typing import Dict, List, Literal, Optional
 
 
 class BaseRedisCache:
@@ -99,7 +99,7 @@ class BaseRedisCache:
         """
         return self.__delete(key)
 
-    async def _clear(self, namespace: Optional[str]):
+    async def _clear(self, namespace: Optional[str]) -> Literal[True]:
         """Clears out the internal memory cache
 
         Args:
