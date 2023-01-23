@@ -3,8 +3,8 @@ from typing import Optional
 
 import discord
 from anyio import Path
-from cache import RedisConnPoolCache
 from discord.ext import commands
+from libs.cache import RedisConnPoolCache
 from redis.asyncio.connection import Connection, ConnectionPool
 
 
