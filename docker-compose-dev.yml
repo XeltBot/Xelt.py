@@ -1,13 +1,35 @@
 version: "3.9"
 services:
   redis:
-    container_name: Xeltpy-Redis-Dev
-    image: redis:7
+    container_name: Xeltpy-Redis-Stack-Dev
+    image: redis/redis-stack:7.0.6-RC4
     ports:
       - 6379:6379
+      - 8001:8001
     volumes:
       - dev_redis_volume:/data
-    command: redis-server --save 60 1 --loglevel warning
+    command: redis-stack-server --protected-mode no 
 
+  postgres:
+    container_name: Xeltpy-Postgres-Dev
+    image: postgres:15
+    ports:
+      - 5432:5432
+    volumes:
+      - dev_postgres_volume:/var/lib/postgresql/data
+    env_file: 
+      - .env
+    
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: Xeltpy-Pgbouncer-Dev
+    ports:
+      - 6432:6432 # This will sit in front of the PostgreSQL server
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      
 volumes:
   dev_redis_volume:
+  dev_postgres_volume:
