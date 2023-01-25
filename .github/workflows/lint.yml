@@ -44,7 +44,7 @@ jobs:
       - name: Install Poetry Dependencies
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
-          poetry install --with=dev
+          poetry install --with=dev,types
       
       - name: Run Mypy
         run:
