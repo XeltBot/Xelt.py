@@ -26,7 +26,7 @@ redis = {extras = ["hiredis"], version = "^4.4.2"}
 pre-commit = "^2.21.0"
 pyinstrument = "^4.4.0"
 mypy = "^0.991"
-pyright = "^1.1.290"
+pyright = "^1.1.291"
 
 
 [tool.poetry.group.tests.dependencies]
