@@ -5,7 +5,7 @@
 To get started, you'll need these software installed:
 
 - [Git](https://git-scm.com/)
-- [Python 3](https://www.python.org/) (Python 3.10 is what the codebase uses)
+- [Python 3](https://www.python.org/) (Python 3.11 is what the codebase uses)
 - [Poetry](https://python-poetry.org/)
 - [Pyenv](https://github.com/pyenv/pyenv) (Optional, Recommended)
 - [WSL2](https://docs.microsoft.com/en-us/windows/wsl/) (If working on Windows)
@@ -83,7 +83,7 @@ brew install openssl openssl@1.1 libffi git curl make opus
 2. Install all of the dependencies (including dev dependencies)
 
     ```sh
-    poetry install --with=dev
+    poetry install --with=dev,tests,types
     ```
 
     > **Note**
