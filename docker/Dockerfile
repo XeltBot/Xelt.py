@@ -66,7 +66,7 @@ RUN adduser --disabled-password --gecos "" xelt \
 
 USER xelt
 
-ENV PATH="${PATH}:${HOME}/.local/bin"
+ENV PATH="${PATH}:/home/xelt/.local/bin"
 
 RUN pip install --user --no-index --find-links=/Xelt/wheels -r requirements.txt
 
