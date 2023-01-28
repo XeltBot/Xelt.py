@@ -8,3 +8,7 @@ generator client {
     recursive_type_depth = 5
 }
 
+model Guild {
+    guild_id         BigInt     @id @unique
+    locale           String     @default("en")
+}

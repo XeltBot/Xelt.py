@@ -1,7 +1,8 @@
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 import discord
+import redis.asyncio as redis
 from anyio import Path
 from discord.ext import commands
 from redis.asyncio.connection import Connection, ConnectionPool
@@ -35,8 +36,24 @@ class XeltCore(commands.Bot):
         await memCache.addConnPool(key=key, conn_pool_obj=ConnectionPool(connection_class=conn))  # type: ignore
         self.logger.info("Saved Redis connection pool into memory")
 
+    async def pingRedisServer(
+        self, connection_pool: Union[ConnectionPool, None]
+    ) -> None:
+        """Pings Redis to make sure it is alive
+
+        Args:
+            connection_pool (Union[ConnectionPool, None]): ConnectionPool object to use
+        """
+        r: redis.Redis = redis.Redis(connection_pool=connection_pool)
+        res = await r.ping()
+        isServerUp = True if res == b"PONG" else False
+        self.logger.info(
+            "Redis server is currently alive"
+        ) if isServerUp else self.logger.info("Redis server is currently down")
+
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
+        # Load the cogs. The way how it's done is by recursively through the cogs folder
         cogsPath = Path(__file__).parent.joinpath("cogs")
         async for cog in cogsPath.rglob("*.py"):
             self.logger.debug(f"Loaded Cog: {cog.name[:-3]}")
@@ -44,7 +61,9 @@ class XeltCore(commands.Bot):
 
         # Internally creates and saves the ConnectionPool object into memory
         # Now that ConnectionPool object can be used to access the Redis database
+        memCache = RedisConnPoolCache()
         await self.setupRedisConnPool()
+        await self.pingRedisServer(connection_pool=await memCache.getConnPool("main"))
 
         # This is needed in order to sync all of the commands to the testing guild.
         if self.testing_guild_id:

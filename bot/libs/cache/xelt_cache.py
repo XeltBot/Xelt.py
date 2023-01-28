@@ -1,10 +1,14 @@
-from typing import Optional, Union
+from typing import Any, Dict, Optional, TypeAlias, Union
 
 import ormsgpack
 import redis.asyncio as redis
 from redis.asyncio.connection import ConnectionPool
 
 from .key_builder import CommandKeyBuilder
+
+# Is this really needed?
+# https://github.com/python/typing/issues/182#issuecomment-1320974824
+JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
 
 
 class XeltCache:
@@ -63,3 +67,30 @@ class XeltCache:
         if getValue is None:
             return None
         return ormsgpack.unpackb(getValue)  # type: ignore
+
+    async def setJSONCache(self, key: str, value: Dict[str, Any], ttl: int = 5) -> None:
+        """Sets a JSON cache to Redis.
+
+        This coroutine accepts a nested `Dict[str, Any]` as the value. The data will be first serialized into msgpack, and then sent to Redis. This results in better compression and standards.
+
+        Args:
+            key (str): The key to be stored in Redis
+            value (Dict[str, Any]): Nested Dict to be stored in Redis.
+            ttl (int): TTL of the key-value pair. Defaults to 5.
+        """
+        await self.redisConn.json().set(name=key, path=".", obj=ormsgpack.packb(value))
+        await self.redisConn.expire(name=key, time=ttl)
+
+    async def getJSONCache(self, key: str) -> Union[Any, None]:
+        """Retrieves the JSON cache from Redis.
+
+        Args:
+            key (str): The key to be retrieved from Redis
+
+        Returns:
+            Union[Dict[str, Any], None]: The deserialized JSON data. If not found, returns `None`
+        """
+        getJSON = await self.redisConn.json().get(name=key)
+        if getJSON is None:
+            return None
+        return ormsgpack.unpackb(getJSON)
