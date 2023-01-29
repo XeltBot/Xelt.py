@@ -10,35 +10,17 @@ services:
       - dev_redis_volume:/data
     command: redis-stack-server --protected-mode no 
 
-  citus_master:
-    container_name: "Xeltpy-Citus-Master-Dev"
-    image: "citusdata/citus:11.1.5"
-    ports: ["${COORDINATOR_EXTERNAL_PORT:-5432}:5432"]
-    labels: ["com.citusdata.role=Master"]
-    environment: &AUTH
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      PGUSER: "${POSTGRES_USER}"
-      PGPASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_HOST_AUTH_METHOD: "${POSTGRES_HOST_AUTH_METHOD:-trust}"
-  citus_worker:
-    container_name: "Xeltpy-Citus-Worker-Dev"
-    image: "citusdata/citus:11.1.5"
-    labels: ["com.citusdata.role=Worker"]
-    depends_on: [citus_manager]
-    environment: *AUTH
-    command: "/wait-for-manager.sh"
+  postgres:
+    container_name: Xeltpy-Postgres-Dev
+    image: postgres:15
+    restart: always
+    env_file:
+      - .env
     volumes:
-      - healthcheck_volume:/healthcheck
-  citus_manager:
-    container_name: "Xeltpy-Citus-Manager-Dev"
-    image: "citusdata/membership-manager:0.3.0"
-    volumes:
-      - "${DOCKER_SOCK:-/var/run/docker.sock}:/var/run/docker.sock"
-      - healthcheck_volume:/healthcheck
-    depends_on: [citus_master]
-    environment: *AUTH
-    
+      - dev_postgres_volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
   pgbouncer:
     image: edoburu/pgbouncer:latest
     container_name: Xeltpy-Pgbouncer-Dev
@@ -47,8 +29,9 @@ services:
     env_file:
       - .env
     depends_on:
-      - citus_master
+      - postgres
       
 volumes:
   dev_redis_volume:
+  dev_postgres_volume:
   dev_healthcheck_volume:
