@@ -1,14 +1,10 @@
-from typing import Any, Dict, Optional, TypeAlias, Union
+from typing import Any, Dict, Optional, Union
 
 import ormsgpack
 import redis.asyncio as redis
 from redis.asyncio.connection import ConnectionPool
 
 from .key_builder import CommandKeyBuilder
-
-# Is this really needed?
-# https://github.com/python/typing/issues/182#issuecomment-1320974824
-JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | str | int | float | bool | None
 
 
 class XeltCache:
