@@ -25,7 +25,7 @@ COPY /poetry.lock /Xelt/
 
 # Save the dependencies as wheels (.whl)
 # In order to get this ready for production, the dev dependencies are not included
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --without=dev \
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --only main \
   && pip wheel --wheel-dir=/Xelt/wheels -r requirements.txt
 
 ####################################################################################################
@@ -42,7 +42,8 @@ RUN apt update \
   bash \
   netcat \
   libnacl-dev \
-  libopus-dev 
+  libopus-dev \
+  libffi-dev
 
 # Note that wait-for is being copied over. This will be needed for Docker Compose support later
 WORKDIR /Xelt
@@ -50,7 +51,10 @@ COPY /bot/xeltbot.py /Xelt/bot/
 COPY /bot/xeltcore.py /Xelt/bot/
 COPY /bot/cogs /Xelt/bot/cogs/
 COPY /docker/wait-for /Xelt/wait-for
+COPY /docker/start.sh /Xelt/start.sh
+COPY /schema.prisma /Xelt/schema.prisma
 
+# Copy over all of the wheels and requirements.txt
 COPY --from=builder /Xelt/wheels /Xelt/wheels
 COPY --from=builder /Xelt/requirements.txt /Xelt/requirements.txt
 
@@ -62,18 +66,20 @@ RUN pip install --upgrade pip setuptools
 # This is insecure by default
 RUN adduser --disabled-password --gecos "" xelt \
   && chown -R xelt:xelt /Xelt \
-  && chmod +x /Xelt/wait-for
+  && chmod +x /Xelt/wait-for \
+  && chmod +x /Xelt/start.sh
 
 USER xelt
 
+# Mainly to get the executables working
 ENV PATH="${PATH}:/home/xelt/.local/bin"
 
+# Finalally actually install all of the libraries
 RUN pip install --user --no-index --find-links=/Xelt/wheels -r requirements.txt
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
-# A start.sh script is needed later for prisma to migrate the models
-CMD ["python", "/Xelt/bot/xelt.py"]
+CMD ["Xelt/start.sh"]
 
 STOPSIGNAL SIGTERM
 
