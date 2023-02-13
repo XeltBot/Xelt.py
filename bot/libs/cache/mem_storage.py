@@ -35,3 +35,49 @@ class MemStorage:
         """
         self._storage[key] = value
         return True
+
+    def add(self, key: str, value: ConnectionPool) -> Literal[True]:
+        """Adds a key into the internal memory storage
+
+        Args:
+            key (str): The key to set
+            value: (ConnectionPool): `ConnectionPool` object to set
+
+        Raises:
+            ValueError: If the key is already in the cache
+
+        Returns:
+            Literal[True]: Always returns `True`, since it will always be set
+        """
+        if key in self._storage:
+            raise ValueError(f"Key {key} already exists, use .set to update the value")
+
+        self.set(key, value)
+        return True
+
+    def exists(self, key: str) -> bool:
+        """Tests whether a key exists in the internal memory storage
+
+        Args:
+            key (str): The key to check against
+
+        Returns:
+            bool: Whether the key does exist within the internal cache
+        """
+        return key in self._storage
+
+    def delete(self, key: str) -> bool:
+        """Deletes a key from the internal memory storage
+
+        Args:
+            key (str): The key to delete
+
+        Returns:
+            bool: Whether it has been able to delete the key
+        """
+        if self._storage.pop(key, None) is not None:
+            handle = self._handlers.pop(key, None)
+            if handle:
+                handle.cancel()
+            return True
+        return False
