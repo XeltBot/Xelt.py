@@ -90,3 +90,6 @@ class XeltCache:
         if getJSON is None:
             return None
         return ormsgpack.unpackb(getJSON)
+
+    async def keyExists(self, key: str) -> bool:
+        """Checks if the key exists in the cache or not"""
