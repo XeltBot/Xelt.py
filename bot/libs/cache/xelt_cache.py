@@ -65,28 +65,23 @@ class XeltCache:
         return ormsgpack.unpackb(getValue)  # type: ignore
 
     async def setJSONCache(self, key: str, value: Dict[str, Any], ttl: int = 5) -> None:
-        """Sets a JSON cache to Redis.
-
-        This coroutine accepts a nested `Dict[str, Any]` as the value. The data will be first serialized into msgpack, and then sent to Redis. This results in better compression and standards.
-
+        """Sets the JSON cache on Redis
         Args:
-            key (str): The key to be stored in Redis
-            value (Dict[str, Any]): Nested Dict to be stored in Redis.
-            ttl (int): TTL of the key-value pair. Defaults to 5.
+            key (str): The key to use for Redis
+            value (Dict[str, Any]): The value of the key-pair value
+            ttl (Optional[int], optional): TTL of the key-value pair. Defaults to 5.
         """
         await self.redisConn.json().set(name=key, path="$", obj=value)
         await self.redisConn.expire(name=key, time=ttl)
 
-    async def getJSONCache(self, key: str) -> Union[Any, None]:
-        """Retrieves the JSON cache from Redis.
-
+    async def getJSONCache(self, key: str) -> Union[str, None]:
+        """Gets the JSON cache on Redis
         Args:
-            key (str): The key to be retrieved from Redis
-
+            key (str): The key of the key-value pair to get
         Returns:
-            Union[Dict[str, Any], None]: The deserialized JSON data. If not found, returns `None`
+            Dict[str, Any]: The value of the key-value pair
         """
-        getJSON = await self.redisConn.json().get(name=key)
-        if getJSON is None:
+        value = await self.redisConn.json().get(name=key)
+        if value is None:
             return None
-        return getJSON
+        return value
