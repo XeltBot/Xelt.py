@@ -74,7 +74,7 @@ class XeltCache:
             value (Dict[str, Any]): Nested Dict to be stored in Redis.
             ttl (int): TTL of the key-value pair. Defaults to 5.
         """
-        await self.redisConn.json().set(name=key, path=".", obj=value)
+        await self.redisConn.json().set(name=key, path="$", obj=value)
         await self.redisConn.expire(name=key, time=ttl)
 
     async def getJSONCache(self, key: str) -> Union[Any, None]:
