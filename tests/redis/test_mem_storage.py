@@ -37,7 +37,7 @@ def test_mem_storage_get(load_conn_pool):
 def test_mem_storage_exists(load_conn_pool):
     memStore = MemStorage()
     memStore.add(key="main2", value=load_conn_pool)
-    doesKeyExists = memStore.get(key="main2")
+    doesKeyExists = memStore.exists(key="main2")
     assert doesKeyExists is True  # nosec
 
 
@@ -45,5 +45,5 @@ def test_mem_storage_delete(load_conn_pool):
     memStore = MemStorage()
     memStore.add(key="main3", value=load_conn_pool)
     memStore.delete(key="main3")
-    doesKeyExists = memStore.get(key="main3")
+    doesKeyExists = memStore.exists(key="main3")
     assert doesKeyExists is False  # nosec
