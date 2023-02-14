@@ -2,7 +2,7 @@ version: "3.9"
 services:
   redis:
     container_name: Xeltpy-Redis-Stack-Dev
-    image: redis/redis-stack:7.0.6-RC4
+    image: redis/redis-stack:7.0.6-RC5
     ports:
       - 6379:6379
       - 8001:8001
@@ -13,7 +13,6 @@ services:
   postgres:
     container_name: Xeltpy-Postgres-Dev
     image: postgres:15
-    restart: always
     env_file:
       - .env
     volumes:

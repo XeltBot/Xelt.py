@@ -3,15 +3,15 @@ import sys
 from pathlib import Path
 
 import pytest
+import redis.asyncio as redis
 from dotenv import load_dotenv
 from redis.asyncio.connection import ConnectionPool
 
 path = Path(__file__).parents[2]
-packagePath = os.path.join(str(path), "bot", "libs")
 envPath = os.path.join(str(path), "bot", ".env")
-sys.path.append(packagePath)
+sys.path.append(str(path))
 
-from cache import MemStorage
+from bot.libs.cache import MemStorage
 
 load_dotenv(dotenv_path=envPath)
 
@@ -47,3 +47,24 @@ def test_mem_storage_delete(load_conn_pool):
     memStore.delete(key="main3")
     doesKeyExists = memStore.exists(key="main3")
     assert doesKeyExists is False  # nosec
+
+
+def test_mem_storage_clear(load_conn_pool):
+    memStore = MemStorage()
+    for i in enumerate(range(10)):
+        memStore.add(key=f"main{i}", value=load_conn_pool)
+    memStore.clear()
+    currAmount = len(memStore.getAll())
+    assert currAmount == 0  # nosec
+
+
+@pytest.mark.asyncio
+async def test_mem_storage_integration(load_conn_pool):
+    memStore = MemStorage()
+    memStore.add(key="main", value=load_conn_pool)
+    currConnPool = memStore.get(key="main")
+    r = redis.Redis(connection_pool=currConnPool, decode_responses=True)
+    await r.set("foo", "bar")
+    res = await r.get("foo")
+    await r.close(close_connection_pool=True)
+    assert res == b"bar"  # nosec

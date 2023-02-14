@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Optional, Union
 
 
 def CommandKeyBuilder(
     prefix: Optional[str] = "cache",
     namespace: Optional[str] = "xeltpy",
-    id: Optional[int] = None,
+    id: Optional[Union[str, int]] = None,
     command: Optional[str] = None,
 ) -> str:
     """A key builder for commands
@@ -12,7 +12,7 @@ def CommandKeyBuilder(
     Args:
         prefix (Optional[str], optional): Prefix of the key. Defaults to "cache".
         namespace (Optional[str], optional): Namespace of the key. Defaults to "xeltpy".
-        id (Optional[int], optional): Discord User or Guild ID. Defaults to None.
+        id (Optional[Union[str, int]], optional): Discord User or Guild ID. Defaults to None.
         command (Optional[str], optional): Slash Command Name. Defaults to None.
 
     Returns:

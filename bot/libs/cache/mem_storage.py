@@ -1,5 +1,5 @@
 from asyncio import TimerHandle
-from typing import Dict, Literal, Union
+from typing import Dict, List, Literal, Optional, Union
 
 from redis.asyncio.connection import ConnectionPool
 
@@ -81,3 +81,29 @@ class MemStorage:
                 handle.cancel()
             return True
         return False
+
+    def getAll(self) -> List[ConnectionPool]:
+        """Gets all of the values from the internal memory storage
+
+        Returns:
+            List[ConectionPool]: A list full of current connection pools
+        """
+        return list(self._storage.values())
+
+    def clear(self, namespace: Optional[str] = None) -> Literal[True]:
+        """Clears out the internal memory cache
+
+        Args:
+            namespace (str, optional): Namespace to clear. Defaults to None.
+
+        Returns:
+            Literal[True]: Confirmation that it has been cleared
+        """
+        if namespace:
+            for key in list(self._storage):
+                if key.startswith(namespace):
+                    self.delete(key)
+        else:
+            self._storage = {}
+            self._handlers = {}
+        return True
