@@ -70,6 +70,6 @@ async def test_json_cache_from_mem(load_json_data):
     if getConnPool is None:
         raise ValueError("Unable to get conn pool from mem cache")
     cache = XeltCache(connection_pool=getConnPool)
-    await cache.setJSONCache(key="$", value=load_json_data, ttl=5)
-    res = await cache.getJSONCache(key="$")
+    await cache.setJSONCache(key="main4", value=load_json_data, ttl=5)
+    res = await cache.getJSONCache(key="main4")
     assert (res == load_json_data) and (isinstance(res, dict))  # nosec
