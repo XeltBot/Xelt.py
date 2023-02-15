@@ -7,7 +7,7 @@ from anyio import Path
 from discord.ext import commands
 from redis.asyncio.connection import ConnectionPool
 
-from bot.libs.cache import MemStorage
+from bot.libs.cache import globalMemStore
 
 
 class XeltCore(commands.Bot):
@@ -34,8 +34,7 @@ class XeltCore(commands.Bot):
         conn = ConnectionPool.from_url(
             f"redis://{self.redis_host}:{self.redis_port}/{self.redis_db}"
         )
-        memStore = MemStorage()
-        memStore.add(key=key, value=conn)
+        globalMemStore.add(key=key, value=conn)
         self.logger.info("Saved Redis connection pool into memory")
 
     async def pingRedisServer(
@@ -63,9 +62,8 @@ class XeltCore(commands.Bot):
 
         # Internally creates and saves the ConnectionPool object into memory
         # Now that ConnectionPool object can be used to access the Redis database
-        memStore = MemStorage()
         self.setupRedisConnPool()
-        await self.pingRedisServer(connection_pool=memStore.get("main"))
+        await self.pingRedisServer(connection_pool=globalMemStore.get("main"))
 
         # This is needed in order to sync all of the commands to the testing guild.
         if self.testing_guild_id:

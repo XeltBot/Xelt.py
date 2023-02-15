@@ -61,7 +61,6 @@ async def test_json_cache(load_json_data):
 
 @pytest.mark.asyncio
 async def test_json_cache_from_mem(load_json_data):
-    key = CommandKeyBuilder(id=None, command=None)
     memStore = MemStorage()
     memStore.set(
         "redis_conn_pool2", ConnectionPool.from_url("redis://localhost:6379/0")
