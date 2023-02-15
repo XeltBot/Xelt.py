@@ -18,7 +18,6 @@ class XeltCache:
         """
         self.self = self
         self.connection_pool: ConnectionPool = connection_pool
-        self.redisConn: redis.Redis = redis.Redis(connection_pool=self.connection_pool)
 
     def defaultKey(self, key: Optional[str]) -> str:
         """Determines whether to use the default `CommandKeyBuilder` str or not
@@ -46,9 +45,13 @@ class XeltCache:
             key (Optional[str], optional): The key to be stored in Redis. Defaults to CommandKeyBuilder(id=None, command=None).
             ttl (Optional[int], optional): The time (in seconds) that the key will exist. Basically the TTL. Defaults to 5.
         """
-        await self.redisConn.set(
+        client: redis.Redis = redis.Redis(
+            connection_pool=self.connection_pool, auto_close_connection_pool=False
+        )
+        await client.set(
             name=self.defaultKey(key=key), value=ormsgpack.packb(value), ex=ttl
         )
+        await client.close(close_connection_pool=False)
 
     async def getBasicCache(self, key: str) -> Union[str, None]:
         """Gets the basic command cache from Redis
@@ -59,9 +62,14 @@ class XeltCache:
         Returns:
             Union[str, None]: The value of the key. If not found, returns `None`
         """
-        getValue = await self.redisConn.get(key)
+        client: redis.Redis = redis.Redis(
+            connection_pool=self.connection_pool, auto_close_connection_pool=False
+        )
+        getValue = await client.get(key)
         if getValue is None:
+            await client.close(close_connection_pool=False)
             return None
+        await client.close(close_connection_pool=False)
         return ormsgpack.unpackb(getValue)  # type: ignore
 
     async def setJSONCache(self, key: str, value: Dict[str, Any], ttl: int = 5) -> None:
@@ -71,17 +79,26 @@ class XeltCache:
             value (Dict[str, Any]): The value of the key-pair value
             ttl (Optional[int], optional): TTL of the key-value pair. Defaults to 5.
         """
-        await self.redisConn.json().set(name=key, path="$", obj=value)
-        await self.redisConn.expire(name=key, time=ttl)
+        client: redis.Redis = redis.Redis(
+            connection_pool=self.connection_pool, auto_close_connection_pool=False
+        )
+        await client.json().set(name=key, path="$", obj=value)
+        await client.expire(name=key, time=ttl)
+        await client.close(close_connection_pool=False)
 
-    async def getJSONCache(self, key: str) -> Union[str, None]:
+    async def getJSONCache(self, key: str) -> Any:
         """Gets the JSON cache on Redis
         Args:
             key (str): The key of the key-value pair to get
         Returns:
-            Dict[str, Any]: The value of the key-value pair
+            Any: The value of the key-value pair
         """
-        value = await self.redisConn.json().get(name=key)
+        client: redis.Redis = redis.Redis(
+            connection_pool=self.connection_pool, auto_close_connection_pool=False
+        )
+        value = await client.json().get(name=key)
         if value is None:
+            await client.close(close_connection_pool=False)
             return None
+        await client.close(close_connection_pool=False)
         return value
