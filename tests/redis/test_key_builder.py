@@ -8,12 +8,12 @@ from bot.libs.cache import CommandKeyBuilder
 
 
 def test_key_builder_defaults():
-    assert CommandKeyBuilder() == "cache:akari:None:None"  # nosec
+    assert CommandKeyBuilder() == "cache:xeltpy:None:None"  # nosec
 
 
 def test_key_builder_params():
-    assert CommandKeyBuilder(id=123, command="test") == "cache:akari:123:test"  # nosec
+    assert CommandKeyBuilder(id=123, command="test") == "cache:xeltpy:123:test"  # nosec
 
 
 def test_key_builder_id():
-    assert CommandKeyBuilder(id=123) == "cache:akari:123:None"  # nosec
+    assert CommandKeyBuilder(id=123) == "cache:xeltpy:123:None"  # nosec
