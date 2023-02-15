@@ -72,17 +72,21 @@ class XeltCache:
         await client.close(close_connection_pool=False)
         return ormsgpack.unpackb(getValue)  # type: ignore
 
-    async def setJSONCache(self, key: str, value: Dict[str, Any], ttl: int = 5) -> None:
+    async def setJSONCache(
+        self, key: str, value: Dict[str, Any], path: str = "$", ttl: int = 5
+    ) -> None:
         """Sets the JSON cache on Redis
+
         Args:
             key (str): The key to use for Redis
             value (Dict[str, Any]): The value of the key-pair value
-            ttl (Optional[int], optional): TTL of the key-value pair. Defaults to 5.
+            path (str, optional): The path to use for the JSON. Defaults to "$".
+            ttl (int, optional): TTL of the key-value pair. Defaults to 5.
         """
         client: redis.Redis = redis.Redis(
             connection_pool=self.connection_pool, auto_close_connection_pool=False
         )
-        await client.json().set(name=key, path="$", obj=value)
+        await client.json().set(name=key, path=path, obj=value)
         await client.expire(name=key, time=ttl)
         await client.close(close_connection_pool=False)
 
@@ -102,3 +106,19 @@ class XeltCache:
             return None
         await client.close(close_connection_pool=False)
         return value
+
+    async def cacheExists(self, key: str) -> bool:
+        """Checks if the cache does exists
+
+        Args:
+            key (str): The key to use to search
+
+        Returns:
+            bool: `True` when the cache exists, `False` when it does not
+        """
+        client: redis.Redis = redis.Redis(
+            connection_pool=self.connection_pool, auto_close_connection_pool=False
+        )
+        res = await client.exists(key)
+        await client.close(close_connection_pool=False)
+        return True if res >= 1 else False

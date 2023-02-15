@@ -1,19 +1,14 @@
-import os
 import sys
 from pathlib import Path
 
 import pytest
 import redis.asyncio as redis
-from dotenv import load_dotenv
 from redis.asyncio.connection import ConnectionPool
 
 path = Path(__file__).parents[2]
-envPath = os.path.join(str(path), "bot", ".env")
 sys.path.append(str(path))
 
 from bot.libs.cache import MemStorage
-
-load_dotenv(dotenv_path=envPath)
 
 
 @pytest.fixture(autouse=True, scope="session")

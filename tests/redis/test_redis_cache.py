@@ -11,7 +11,10 @@ from redis.asyncio.connection import ConnectionPool
 
 from bot.libs.cache import CommandKeyBuilder, MemStorage, XeltCache
 
-DATA = "Hello World!"
+
+@pytest.fixture(autouse=True, scope="session")
+def load_str_data():
+    return "Hello World!"
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -28,16 +31,16 @@ def load_json_data():
 
 
 @pytest.mark.asyncio
-async def test_basic_cache(load_conn_pool):
+async def test_basic_cache(load_conn_pool, load_str_data):
     key = CommandKeyBuilder(id=None, command=None)
     cache = XeltCache(connection_pool=load_conn_pool)
-    await cache.setBasicCache(key=key, value=DATA)
+    await cache.setBasicCache(key=key, value=load_str_data)
     res = await cache.getBasicCache(key)
-    assert (res == DATA) and (isinstance(res, str))  # nosec
+    assert (res == load_str_data) and (isinstance(res, str))  # nosec
 
 
 @pytest.mark.asyncio
-async def test_basic_cache_from_mem():
+async def test_basic_cache_from_mem(load_str_data):
     key = CommandKeyBuilder(id=None, command=None)
     memStore = MemStorage()
     memStore.set("redis_conn_pool", ConnectionPool.from_url("redis://localhost:6379/0"))
@@ -45,9 +48,9 @@ async def test_basic_cache_from_mem():
     if getConnPool is None:
         raise ValueError("Unable to get conn pool from mem cache")
     cache = XeltCache(connection_pool=getConnPool)
-    await cache.setBasicCache(key=key, value=DATA)
+    await cache.setBasicCache(key=key, value=load_str_data)
     res = await cache.getBasicCache(key=key)
-    assert (res == DATA) and (isinstance(res, str))  # nosec
+    assert (res == load_str_data) and (isinstance(res, str))  # nosec
 
 
 @pytest.mark.asyncio
@@ -72,3 +75,12 @@ async def test_json_cache_from_mem(load_json_data):
     await cache.setJSONCache(key="main4", value=load_json_data, ttl=5)
     res = await cache.getJSONCache(key="main4")
     assert (res == load_json_data) and (isinstance(res, dict))  # nosec
+
+
+@pytest.mark.asyncio
+async def test_cache_exists(load_str_data):
+    connPool = ConnectionPool().from_url("redis://localhost:6379/0")
+    cache = XeltCache(connection_pool=connPool)
+    await cache.setBasicCache(key="main5", value=load_str_data, ttl=15)
+    res = await cache.cacheExists(key="main5")
+    assert res is True  # nosec
