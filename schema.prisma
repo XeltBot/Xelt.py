@@ -1,14 +1,40 @@
 datasource db {
-    provider = "postgresql"
-    url = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
-    provider             = "prisma-client-py"
-    recursive_type_depth = 5
+  provider             = "prisma-client-py"
+  recursive_type_depth = 5
 }
 
 model Guild {
-    guild_id         BigInt     @id @unique
-    locale           String     @default("en")
+  guild_id BigInt @id @unique
+  locale   String @default("en")
+}
+
+model TrConfig {
+  id               BigInt @id @unique
+  user             TrUser @relation(fields: [user_id], references: [id])
+  user_id          BigInt @unique
+  background_color String @default("#000000")
+}
+
+model TrRecord {
+  id                 BigInt @id @unique
+  user               TrUser @relation(fields: [user_id], references: [id])
+  user_id            BigInt @unique
+  total_games_played Int    @default(0)
+  avgAccuracy        Float  @default(0)
+  level              Int    @default(0)
+  xp                 Int    @default(0)
+  time_played        Int    @default(0) // What is this for on the original models?
+}
+
+model TrUser {
+  id       BigInt    @id @default(autoincrement())
+  username String
+  config   TrConfig?
+  personal TrRecord?
+  // guilds TrRecord[] doesn't work w/ prisma
 }

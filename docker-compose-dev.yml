@@ -1,8 +1,9 @@
 version: "3.9"
+name: "xeltpy-dev"
 services:
   redis:
     container_name: Xeltpy-Redis-Stack-Dev
-    image: redis/redis-stack:7.0.6-RC5
+    image: redis/redis-stack:7.0.6-RC6
     ports:
       - 6379:6379
       - 8001:8001
