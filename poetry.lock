@@ -1714,14 +1714,14 @@ tests = ["hypothesis (>=3.27.0)", "pytest (>=3.2.1,!=3.3.0)"]
 
 [[package]]
 name = "pyright"
-version = "1.1.296"
+version = "1.1.297"
 description = "Command line wrapper for pyright"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pyright-1.1.296-py3-none-any.whl", hash = "sha256:51cc5f05807b1fb53f9f0e14736b8f772b500a3ba4e0edeb99727e68e700d9ea"},
-    {file = "pyright-1.1.296.tar.gz", hash = "sha256:6c3cd394473e55a516ebe443d02b83e63456ef29f052dcf8e64e7875c1418fa6"},
+    {file = "pyright-1.1.297-py3-none-any.whl", hash = "sha256:3fd6528280eb649f8b64b7ece55299f01e340d29f4cf257da876957e3ee24062"},
+    {file = "pyright-1.1.297.tar.gz", hash = "sha256:89082de2fbd240fa75767b57824f4d8516f2fb9005047265a67b895547c6272f"},
 ]
 
 [package.dependencies]
@@ -2181,4 +2181,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "017ff1c885706859e0aaec37e7be1827e932dc026351af4ee2e01f34441ba099"
+content-hash = "59a61abb7653e0c578e8419293129b61e27e2fd36e6211b78c8b9a571f01f866"
