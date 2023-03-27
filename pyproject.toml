@@ -24,7 +24,7 @@ faust-cchardet = "^2.1.18"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.2.1"
 pyinstrument = "^4.4.0"
-pyright = "^1.1.299"
+pyright = "^1.1.300"
 
 
 [tool.poetry.group.tests.dependencies]
