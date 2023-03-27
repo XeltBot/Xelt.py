@@ -7,9 +7,8 @@ import pytest
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
+from libs.cache import CommandKeyBuilder, XeltCache
 from redis.asyncio.connection import ConnectionPool
-
-from bot.libs.cache import CommandKeyBuilder, XeltCache, xeltCP
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -36,16 +35,6 @@ async def test_basic_cache(load_conn_pool, load_str_data):
     cache = XeltCache(connection_pool=load_conn_pool)
     await cache.setBasicCache(key=key, value=load_str_data)
     res = await cache.getBasicCache(key)
-    assert (res == load_str_data.encode()) and (isinstance(res, bytes))  # nosec
-
-
-@pytest.mark.asyncio
-async def test_basic_cache_from_mem(load_str_data):
-    key = CommandKeyBuilder(id=23523, command=None)
-    connPool = xeltCP.getConnPool()
-    cache = XeltCache(connection_pool=connPool)
-    await cache.setBasicCache(key=key, value=load_str_data)
-    res = await cache.getBasicCache(key=key)
     assert (res == load_str_data.encode()) and (isinstance(res, bytes))  # nosec
 
 

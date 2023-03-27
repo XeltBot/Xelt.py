@@ -4,7 +4,7 @@ from pathlib import Path
 path = Path(__file__).parents[2]
 sys.path.append(str(path))
 
-from bot.libs.utils import backoff
+from libs.utils import backoff
 
 
 def test_backoff():

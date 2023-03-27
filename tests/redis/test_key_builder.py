@@ -4,7 +4,7 @@ from pathlib import Path
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
-from bot.libs.cache import CommandKeyBuilder
+from libs.cache import CommandKeyBuilder
 
 
 def test_key_builder_defaults():

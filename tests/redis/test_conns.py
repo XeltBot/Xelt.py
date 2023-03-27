@@ -6,8 +6,8 @@ import pytest
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
-from bot.libs.cache import XeltCPManager
-from bot.libs.utils.redis import pingRedis, redisCheck
+from libs.cache import XeltCPManager
+from libs.utils.redis import pingRedis, redisCheck
 
 
 @pytest.mark.asyncio

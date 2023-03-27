@@ -6,7 +6,7 @@ from redis.asyncio.connection import ConnectionPool
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
-from bot.libs.cache import XeltCPManager
+from libs.cache import XeltCPManager
 
 
 def test_create_cp():

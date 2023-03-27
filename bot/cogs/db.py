@@ -2,9 +2,9 @@ import asyncio
 import logging
 
 from discord.ext import commands, tasks
-from Libs.utils import backoff
-from prisma import Prisma  # type: ignore
-from prisma.engine.errors import EngineConnectionError  # type: ignore
+from libs.utils import backoff
+from prisma import Prisma
+from prisma.engine.errors import EngineConnectionError
 
 
 # Ripped straight from Kumiko

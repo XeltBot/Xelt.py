@@ -6,9 +6,8 @@ import pytest
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
+from libs.cache import cached, cachedJson
 from redis.asyncio.connection import ConnectionPool
-
-from bot.libs.cache import cached, cachedJson
 
 
 @pytest.mark.asyncio

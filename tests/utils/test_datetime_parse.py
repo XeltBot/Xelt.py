@@ -2,12 +2,11 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-path = Path(__file__).parents[2].joinpath("Bot")
+path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
 import pytest
-
-from bot.libs.utils import encodeDatetime, parseDatetime
+from libs.utils import encodeDatetime, parseDatetime
 
 
 @pytest.fixture(scope="session", autouse=True)
