@@ -1904,14 +1904,14 @@ cryptography = ">=35.0.0"
 
 [[package]]
 name = "types-redis"
-version = "4.5.2.0"
+version = "4.5.3.0"
 description = "Typing stubs for redis"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-redis-4.5.2.0.tar.gz", hash = "sha256:f3243339702cde2966e21f7fc34f8e9be1b55b407e8242ba204a42360f248678"},
-    {file = "types_redis-4.5.2.0-py3-none-any.whl", hash = "sha256:54964b1b18b7c868c543011eafab7aafd3d57e5285075ae1b574288535d93b4e"},
+    {file = "types-redis-4.5.3.0.tar.gz", hash = "sha256:f23415e448ca25ec5028c24fdf3717a13f0c905eb1933733e8a8a7d4952f6908"},
+    {file = "types_redis-4.5.3.0-py3-none-any.whl", hash = "sha256:7c1d5fdb0a2d5fd92eac37ce382fdb47d99a69889e7d6c2bc4479148ac646c73"},
 ]
 
 [package.dependencies]
@@ -2087,4 +2087,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "6c8ac4c7ac4718cdc341c36ef586d3f58569bc97cdf97880483d4a767aa5a9f1"
+content-hash = "256a6b15b60ea58456c008ff6ee89f5e27e1e969799fb3cbca0dff960b974217"
