@@ -8,20 +8,18 @@ on:
   pull_request:
     branches:
       - dev/v3
-      - main
 
+env:
+  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+  REDIS_HOST: localhost
+  REDIS_PORT: 6379
+  REDIS_PASSWORD: xelt
   
 jobs: 
   Test:
     name: Test (${{ matrix.version }})
     runs-on: ubuntu-latest
 
-    services:
-      redis:
-        image: redis/redis-stack-server:7.0.6-RC5
-        ports: 
-          - 6379:6379
-          
     strategy:
       fail-fast: false
       matrix:

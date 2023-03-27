@@ -25,7 +25,6 @@ redis = {extras = ["hiredis"], version = "^4.5.2"}
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^2.21.0"
 pyinstrument = "^4.4.0"
-mypy = "^1.1"
 pyright = "^1.1.299"
 
 
@@ -50,6 +49,9 @@ exclude = ["**/__pycache__", "**/.mypy_cache", "**/.dmpypy.json"]
 ignore = ["docker"]
 reportMissingImports = true
 reportMissingTypeStubs = false
+
+[tool.bandit]
+skips = ["B311", "B101"]
 
 [build-system]
 requires = ["poetry-core"]

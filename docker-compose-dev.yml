@@ -3,7 +3,7 @@ name: "xeltpy-dev"
 services:
   redis:
     container_name: Xeltpy-Redis-Stack-Dev
-    image: redis/redis-stack:7.0.6-RC6
+    image: redis/redis-stack:7.0.6-RC8
     ports:
       - 6379:6379
       - 8001:8001
@@ -21,15 +21,15 @@ services:
     ports:
       - 5432:5432
 
-  pgbouncer:
-    image: edoburu/pgbouncer:latest
-    container_name: Xeltpy-Pgbouncer-Dev
-    ports:
-      - 6432:6432 # This will sit in front of the PostgreSQL server
-    env_file:
-      - .env
-    depends_on:
-      - postgres
+  # pgbouncer:
+  #   image: edoburu/pgbouncer:latest
+  #   container_name: Xeltpy-Pgbouncer-Dev
+  #   ports:
+  #     - 6432:6432 # This will sit in front of the PostgreSQL server
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - postgres
       
 volumes:
   dev_redis_volume:

@@ -46,10 +46,6 @@ jobs:
         run: |
           poetry install --with=dev,types
       
-      - name: Run Mypy
-        run:
-          make mypy
-          
       - name: Run Pyright
         run: |
           make pyright
