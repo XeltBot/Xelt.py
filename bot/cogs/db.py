@@ -3,7 +3,7 @@ import logging
 
 from discord.ext import commands, tasks
 from libs.utils import backoff
-from prisma import Prisma
+from prisma import Prisma  # type: ignore
 from prisma.engine.errors import EngineConnectionError
 
 
