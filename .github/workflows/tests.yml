@@ -10,7 +10,7 @@ on:
       - dev/v3
 
 env:
-  DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+  DATABASE_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/postgres
   REDIS_HOST: localhost
   REDIS_PORT: 6379
   REDIS_PASSWORD: xelt
@@ -19,6 +19,26 @@ jobs:
   Test:
     name: Test (${{ matrix.version }})
     runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis/redis-stack-server:7.0.6-RC8
+        ports: 
+          - 6379:6379
+
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     strategy:
       fail-fast: false

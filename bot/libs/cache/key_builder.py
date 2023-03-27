@@ -1,10 +1,11 @@
 from typing import Optional, Union
+from uuid import UUID
 
 
 def CommandKeyBuilder(
     prefix: Optional[str] = "cache",
     namespace: Optional[str] = "xeltpy",
-    id: Optional[Union[str, int]] = None,
+    id: Optional[Union[str, int, UUID]] = None,
     command: Optional[str] = None,
 ) -> str:
     """A key builder for commands

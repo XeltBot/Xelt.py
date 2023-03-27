@@ -4,12 +4,12 @@ from pathlib import Path
 
 import pytest
 
-path = Path(__file__).parents[2]
+path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
 from redis.asyncio.connection import ConnectionPool
 
-from bot.libs.cache import CommandKeyBuilder, MemStorage, XeltCache
+from bot.libs.cache import CommandKeyBuilder, XeltCache, xeltCP
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -36,21 +36,17 @@ async def test_basic_cache(load_conn_pool, load_str_data):
     cache = XeltCache(connection_pool=load_conn_pool)
     await cache.setBasicCache(key=key, value=load_str_data)
     res = await cache.getBasicCache(key)
-    assert (res == load_str_data) and (isinstance(res, str))  # nosec
+    assert (res == load_str_data.encode()) and (isinstance(res, bytes))  # nosec
 
 
 @pytest.mark.asyncio
 async def test_basic_cache_from_mem(load_str_data):
-    key = CommandKeyBuilder(id=None, command=None)
-    memStore = MemStorage()
-    memStore.set("redis_conn_pool", ConnectionPool.from_url("redis://localhost:6379/0"))
-    getConnPool = memStore.get("redis_conn_pool")
-    if getConnPool is None:
-        raise ValueError("Unable to get conn pool from mem cache")
-    cache = XeltCache(connection_pool=getConnPool)
+    key = CommandKeyBuilder(id=23523, command=None)
+    connPool = xeltCP.getConnPool()
+    cache = XeltCache(connection_pool=connPool)
     await cache.setBasicCache(key=key, value=load_str_data)
     res = await cache.getBasicCache(key=key)
-    assert (res == load_str_data) and (isinstance(res, str))  # nosec
+    assert (res == load_str_data.encode()) and (isinstance(res, bytes))  # nosec
 
 
 @pytest.mark.asyncio
@@ -59,21 +55,6 @@ async def test_json_cache(load_json_data):
     cache = XeltCache(connection_pool=connPool)
     await cache.setJSONCache(key="main3", value=load_json_data, ttl=5)
     res = await cache.getJSONCache(key="main3")
-    assert (res == load_json_data) and (isinstance(res, dict))  # nosec
-
-
-@pytest.mark.asyncio
-async def test_json_cache_from_mem(load_json_data):
-    memStore = MemStorage()
-    memStore.set(
-        "redis_conn_pool2", ConnectionPool.from_url("redis://localhost:6379/0")
-    )
-    getConnPool = memStore.get("redis_conn_pool2")
-    if getConnPool is None:
-        raise ValueError("Unable to get conn pool from mem cache")
-    cache = XeltCache(connection_pool=getConnPool)
-    await cache.setJSONCache(key="main4", value=load_json_data, ttl=5)
-    res = await cache.getJSONCache(key="main4")
     assert (res == load_json_data) and (isinstance(res, dict))  # nosec
 
 

@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-path = Path(__file__).parents[2]
+path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
 from bot.libs.cache import CommandKeyBuilder
