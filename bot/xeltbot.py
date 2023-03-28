@@ -12,6 +12,7 @@ load_dotenv()
 
 # If the ID isn't set to a server, this will propagate the slash commands globally
 XELT_TOKEN = os.environ["XELT_DEV_TOKEN"]
+DEV_MODE = os.getenv("DEV_MODE") in ("True", "TRUE")
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -24,10 +25,7 @@ logger = logging.getLogger("discord")
 
 
 async def main():
-    async with XeltCore(
-        intents=intents,
-        command_prefix="!",
-    ) as bot:
+    async with XeltCore(intents=intents, command_prefix="!", dev_mode=DEV_MODE) as bot:
         await bot.start(XELT_TOKEN)
 
 
