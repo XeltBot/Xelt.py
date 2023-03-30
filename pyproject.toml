@@ -18,7 +18,7 @@ prisma = "^0.8.2"
 orjson = "^3.8.9"
 ciso8601 = "^2.3.0"
 anyio = "^3.6.2"
-redis = {extras = ["hiredis"], version = "^4.5.3"}
+redis = {extras = ["hiredis"], version = "^4.5.4"}
 faust-cchardet = "^2.1.18"
 
 [tool.poetry.group.dev.dependencies]
