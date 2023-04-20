@@ -2045,14 +2045,14 @@ files = [
 
 [[package]]
 name = "types-psutil"
-version = "5.9.5.11"
+version = "5.9.5.12"
 description = "Typing stubs for psutil"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-psutil-5.9.5.11.tar.gz", hash = "sha256:3d59da0758f056bfb59fef757366e538c5dd5473d81c35b38956624ae2484f31"},
-    {file = "types_psutil-5.9.5.11-py3-none-any.whl", hash = "sha256:01cc541b187a11e758d336c4cc89abf71d0098627fa95d5cfaca536be31a7d1a"},
+    {file = "types-psutil-5.9.5.12.tar.gz", hash = "sha256:61a91679d3fe737250013b624dca09375e7cc3ad77dcc734553746c429c02aca"},
+    {file = "types_psutil-5.9.5.12-py3-none-any.whl", hash = "sha256:e9a147b8561235c6afcce5aa1adb973fad9ab2c50cf89820697687f53510358f"},
 ]
 
 [[package]]
@@ -2321,4 +2321,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "b1ec74c10c47100f449afee590b6e91ff5fab6d1f5e7b69c33bed114beb45b75"
+content-hash = "f26f8be0614ffce764cadec6d725eb40c93f8a103a6f4526291f29e33f2e96dd"
