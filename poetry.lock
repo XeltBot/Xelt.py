@@ -2113,14 +2113,14 @@ cryptography = ">=35.0.0"
 
 [[package]]
 name = "types-redis"
-version = "4.5.5.0"
+version = "4.5.5.1"
 description = "Typing stubs for redis"
 category = "dev"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-redis-4.5.5.0.tar.gz", hash = "sha256:26547d91f011a4024375d9216cd4d917b4678c984201d46f72c604526c138523"},
-    {file = "types_redis-4.5.5.0-py3-none-any.whl", hash = "sha256:c7132e0cedeb52a83d20138c0440721bfae89cd2027c1ef57a294b56dfde4ee8"},
+    {file = "types-redis-4.5.5.1.tar.gz", hash = "sha256:0193d0522cccd6d46e9e17b811c30fc407e1800e0381da0e95f5c9239bdca58b"},
+    {file = "types_redis-4.5.5.1-py3-none-any.whl", hash = "sha256:569b9795618c95d5f8fad2156dceb622614162761b4382892b99c519c378f776"},
 ]
 
 [package.dependencies]
@@ -2379,4 +2379,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<4"
-content-hash = "3b6c5e3d0458074d403e26be7793e4713a71a308ce6c6b3c7cb6da8b1f31968c"
+content-hash = "f4baed9a9f4dc09778dc7282d9c556c6bdd1a911d8e3a2c0571ac08ffc6deb68"
