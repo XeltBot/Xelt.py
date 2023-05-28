@@ -11,28 +11,11 @@ on:
       - main
 
 
-env:
-  DATABASE_PRISMA_URL: postgresql://postgres:postgres@localhost:5432/postgres
 
 jobs: 
   Analyze:
     name: Analyze
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout
@@ -40,7 +23,7 @@ jobs:
         
       - name: Set up Python 3.11
         id: setup-python
-        uses: actions/setup-python@v4.4.0
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
@@ -54,7 +37,7 @@ jobs:
 
       - name: Cache Poetry
         id: cache-poetry
-        uses: actions/cache@v3.2.2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-v4-${{ hashFiles('**/poetry.lock') }}
@@ -62,7 +45,7 @@ jobs:
       - name: Install Poetry Dependencies
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
-          poetry install --with=dev,types
+          poetry install --with=dev
       
       - name: Run Pyright
         run: |
