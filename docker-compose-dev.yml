@@ -22,7 +22,7 @@ services:
       - 5432:5432
 
   pgbouncer:
-    image: edoburu/pgbouncer:latest
+    image: bitnami/pgbouncer:latest
     container_name: Xeltpy-Pgbouncer-Dev
     ports:
       - 6432:6432 # This will sit in front of the PostgreSQL server
