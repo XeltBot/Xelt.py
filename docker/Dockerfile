@@ -55,6 +55,8 @@ COPY /bot/xeltcore.py /Xelt/bot/
 COPY /bot/cogs /Xelt/bot/cogs/
 COPY /docker/wait-for /Xelt/wait-for
 COPY /docker/start.sh /Xelt/start.sh
+COPY /migrate.py /Xelt/migrate.py
+COPY /migrations /Xelt/migrations/
 
 # Copy over all of the wheels and requirements.txt
 COPY --from=builder /Xelt/wheels /Xelt/wheels
