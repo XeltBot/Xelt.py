@@ -5,11 +5,13 @@ FROM python:3.11-slim-bullseye AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
+# We will need git later...
 RUN apt update \
   && apt install -y --no-install-recommends \
   build-essential \
   ca-certificates \
-  curl
+  curl \
+  git
 
 # Install Poetry locally. This will be needed to produce the wheels
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -43,7 +45,8 @@ RUN apt update \
   netcat \
   libnacl-dev \
   libopus-dev \
-  libffi-dev
+  libffi-dev \
+  git
 
 # Note that wait-for is being copied over. This will be needed for Docker Compose support later
 WORKDIR /Xelt
@@ -52,7 +55,6 @@ COPY /bot/xeltcore.py /Xelt/bot/
 COPY /bot/cogs /Xelt/bot/cogs/
 COPY /docker/wait-for /Xelt/wait-for
 COPY /docker/start.sh /Xelt/start.sh
-COPY /schema.prisma /Xelt/schema.prisma
 
 # Copy over all of the wheels and requirements.txt
 COPY --from=builder /Xelt/wheels /Xelt/wheels
