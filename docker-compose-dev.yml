@@ -3,13 +3,11 @@ name: "xeltpy-dev"
 services:
   redis:
     container_name: Xeltpy-Redis-Stack-Dev
-    image: redis/redis-stack:7.0.6-RC8
+    image: redis/redis-stack:7.2.0-M01
     ports:
       - 6379:6379
-      - 8001:8001
     volumes:
       - dev_redis_volume:/data
-    command: redis-stack-server --protected-mode no 
 
   postgres:
     container_name: Xeltpy-Postgres-Dev
