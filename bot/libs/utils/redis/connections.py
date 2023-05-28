@@ -21,6 +21,21 @@ async def pingRedis(connection_pool: ConnectionPool) -> bool:
     return await r.ping()
 
 
+async def ensureRedis() -> bool:
+    """Ensures that the current connection pulled from the pool can be ran.
+
+    Returns:
+        bool: True if the server is up, False if not
+    """
+    connPool = xeltCP.getConnPool()
+    pingResults = await pingRedis(connPool)
+    if pingResults is True:
+        logger.info("Redis server is up")
+        return True
+    logger.error("Failed to connect to Redis")
+    return False
+
+
 async def redisCheck(
     backoff_sec: int = 15, backoff_index: int = 0
 ) -> Union[bool, None]:

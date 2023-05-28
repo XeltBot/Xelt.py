@@ -1,11 +1,12 @@
 import logging
 from pathlib import Path as SyncPath
 
+import asyncpg
 import discord
 from anyio import Path
 from discord.ext import commands
-
-from bot.libs.utils.redis import redisCheck
+from libs.utils import ensureOpenConn
+from libs.utils.redis import ensureRedis
 
 # Ripped off from Kumiko again
 # Some weird import logic to ensure that watchfiles is there
@@ -22,6 +23,7 @@ class XeltCore(commands.Bot):
     def __init__(
         self,
         intents: discord.Intents,
+        pool: asyncpg.Pool,
         command_prefix: str = "!",
         dev_mode: bool = False,
         *args,
@@ -31,7 +33,17 @@ class XeltCore(commands.Bot):
             intents=intents, command_prefix=command_prefix, *args, **kwargs
         )
         self.dev_mode = dev_mode
+        self._pool = pool
         self.logger = logging.getLogger("xeltbot")
+
+    @property
+    def pool(self) -> asyncpg.Pool:
+        """A global connection pool that is held throughout the lifetime of the bot
+
+        Returns:
+            asyncpg.Pool: Asyncpg connection pool
+        """
+        return self._pool
 
     async def fsWatcher(self) -> None:
         cogsPath = SyncPath(__file__).parent.joinpath("Cogs")
@@ -44,16 +56,19 @@ class XeltCore(commands.Bot):
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
+
         cogsPath = Path(__file__).parent.joinpath("cogs")
         async for cog in cogsPath.rglob("*.py"):
             self.logger.debug(f"Loaded Cog: {cog.name[:-3]}")
             await self.load_extension(f"cogs.{cog.name[:-3]}")
 
+        self.loop.create_task(ensureOpenConn(self._pool))
+        self.loop.create_task(ensureRedis())
+
         if self.dev_mode is True and _fsw is True:
             self.logger.info("Dev mode is enabled. Loading Jishaku and FSWatcher")
             self.loop.create_task(self.fsWatcher())
             await self.load_extension("jishaku")
-        self.loop.create_task(redisCheck())
 
     async def on_ready(self):
         currUser = None if self.user is None else self.user.name

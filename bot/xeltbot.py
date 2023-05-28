@@ -1,36 +1,35 @@
-import logging
 import os
 
+import asyncpg
 import discord
 from anyio import run
 from dotenv import load_dotenv
+from libs.utils import XeltLogger
+from xeltcore import XeltCore
 
-from bot.xeltcore import XeltCore
-
-# If there is an .env file, this will load them into the environment
 load_dotenv()
 
-# If the ID isn't set to a server, this will propagate the slash commands globally
 XELT_TOKEN = os.environ["XELT_DEV_TOKEN"]
+POSTGRES_URI = os.environ["POSTGRES_URI"]
 DEV_MODE = os.getenv("DEV_MODE") in ("True", "TRUE")
 
 intents = discord.Intents.default()
 intents.message_content = True
 
-FORMATTER = logging.Formatter(
-    fmt="%(asctime)s %(levelname)s    %(message)s", datefmt="[%Y-%m-%d %H:%M:%S]"
-)
-discord.utils.setup_logging(formatter=FORMATTER)
-logger = logging.getLogger("discord")
-
 
 async def main():
-    async with XeltCore(intents=intents, command_prefix="!", dev_mode=DEV_MODE) as bot:
-        await bot.start(XELT_TOKEN)
+    async with asyncpg.create_pool(
+        POSTGRES_URI, command_timeout=60, max_size=20, min_size=20
+    ) as pool:
+        async with XeltCore(
+            intents=intents, pool=pool, command_prefix="!", dev_mode=DEV_MODE
+        ) as bot:
+            await bot.start(XELT_TOKEN)
 
 
 if __name__ == "__main__":
     try:
-        run(main, backend_options={"use_uvloop": True})
+        with XeltLogger():
+            run(main, backend_options={"use_uvloop": True})
     except KeyboardInterrupt:
-        logger.info("Shutting down Xelt.py...")
+        pass
