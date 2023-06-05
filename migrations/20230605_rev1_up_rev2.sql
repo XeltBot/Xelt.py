@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS voted_user (
+  id BIGINT PRIMARY KEY,
+  expires TIMESTAMP
+);
+
