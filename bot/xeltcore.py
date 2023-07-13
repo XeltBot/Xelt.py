@@ -5,8 +5,8 @@ import asyncpg
 import discord
 from anyio import Path
 from discord.ext import commands
-from libs.utils import ensureOpenConn
-from libs.utils.redis import ensureRedis
+from libs.utils import check_db_servers
+from redis.asyncio.connection import ConnectionPool
 
 # Ripped off from Kumiko again
 # Some weird import logic to ensure that watchfiles is there
@@ -24,6 +24,7 @@ class XeltCore(commands.Bot):
         self,
         intents: discord.Intents,
         pool: asyncpg.Pool,
+        redis_pool: ConnectionPool,
         command_prefix: str = "!",
         dev_mode: bool = False,
         *args,
@@ -34,6 +35,7 @@ class XeltCore(commands.Bot):
         )
         self.dev_mode = dev_mode
         self._pool = pool
+        self._redis_pool = redis_pool
         self.logger = logging.getLogger("xeltbot")
 
     @property
@@ -44,6 +46,15 @@ class XeltCore(commands.Bot):
             asyncpg.Pool: Asyncpg connection pool
         """
         return self._pool
+
+    @property
+    def redis_pool(self) -> ConnectionPool:
+        """A global redis connection pool that is held throughout the lifetime of the bot
+
+        Returns:
+            ConnectionPool: Redis connection pool
+        """
+        return self._redis_pool
 
     async def fsWatcher(self) -> None:
         cogsPath = SyncPath(__file__).parent.joinpath("Cogs")
@@ -62,8 +73,7 @@ class XeltCore(commands.Bot):
             self.logger.debug(f"Loaded Cog: {cog.name[:-3]}")
             await self.load_extension(f"cogs.{cog.name[:-3]}")
 
-        self.loop.create_task(ensureOpenConn(self._pool))
-        self.loop.create_task(ensureRedis())
+        self.loop.create_task(check_db_servers(self._pool, self._redis_pool))
 
         if self.dev_mode is True and _fsw is True:
             self.logger.info("Dev mode is enabled. Loading Jishaku and FSWatcher")
