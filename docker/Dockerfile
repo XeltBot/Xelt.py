@@ -1,7 +1,7 @@
 ####################################################################################################
 ## Builder image
 ####################################################################################################
-FROM python:3.11-slim-bullseye AS builder
+FROM python:3.11-slim-bookworm AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive 
 
@@ -33,7 +33,7 @@ RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 ####################################################################################################
 ## Final image
 ####################################################################################################
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim-bookworm
 
 # The last two are required libraries for proper voice support on discord.py (Note that python3-dev is not included)
 # Python's C headers are included when the Python interpreter is being compiled
@@ -42,7 +42,7 @@ RUN apt update \
   tini \
   ca-certificates \
   bash \
-  netcat \
+  netcat-traditional \
   libnacl-dev \
   libopus-dev \
   libffi-dev \
