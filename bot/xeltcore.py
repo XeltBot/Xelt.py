@@ -3,9 +3,10 @@ from pathlib import Path as SyncPath
 
 import asyncpg
 import discord
-from anyio import Path
+from cogs import EXTENSIONS
 from discord.ext import commands
 from libs.utils import check_db_servers
+from libs.utils.help import XeltHelp
 from redis.asyncio.connection import ConnectionPool
 
 # Ripped off from Kumiko again
@@ -31,7 +32,11 @@ class XeltCore(commands.Bot):
         **kwargs,
     ) -> None:
         super().__init__(
-            intents=intents, command_prefix=command_prefix, *args, **kwargs
+            intents=intents,
+            command_prefix=command_prefix,
+            help_command=XeltHelp(),
+            *args,
+            **kwargs,
         )
         self.dev_mode = dev_mode
         self._pool = pool
@@ -67,11 +72,9 @@ class XeltCore(commands.Bot):
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
-
-        cogsPath = Path(__file__).parent.joinpath("cogs")
-        async for cog in cogsPath.rglob("*.py"):
-            self.logger.debug(f"Loaded Cog: {cog.name[:-3]}")
-            await self.load_extension(f"cogs.{cog.name[:-3]}")
+        for cog in EXTENSIONS:
+            self.logger.debug(f"Loaded Cog: {cog}")
+            await self.load_extension(f"cogs.{cog}")
 
         self.loop.create_task(check_db_servers(self._pool, self._redis_pool))
 
