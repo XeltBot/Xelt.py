@@ -68,13 +68,13 @@ class XeltCore(commands.Bot):
             if changesList[0].modified == 2:
                 reloadFile = SyncPath(changesList[1])
                 self.logger.info(f"Reloading extension: {reloadFile.name[:-3]}")
-                await self.reload_extension(f"Cogs.{reloadFile.name[:-3]}")
+                await self.reload_extension(f"cogs.{reloadFile.name[:-3]}")
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
         for cog in EXTENSIONS:
             self.logger.debug(f"Loaded Cog: {cog}")
-            await self.load_extension(f"cogs.{cog}")
+            await self.load_extension(cog)
 
         self.loop.create_task(check_db_servers(self._pool, self._redis_pool))
 
