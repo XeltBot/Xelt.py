@@ -41,6 +41,8 @@ class XeltCore(commands.Bot):
         self.dev_mode = dev_mode
         self._pool = pool
         self._redis_pool = redis_pool
+        self._prefixes = {}
+        self.default_prefix = "!"
         self.logger = logging.getLogger("xeltbot")
 
     @property
@@ -60,6 +62,15 @@ class XeltCore(commands.Bot):
             ConnectionPool: Redis connection pool
         """
         return self._redis_pool
+
+    @property
+    def prefixes(self) -> dict[int, list[str]]:
+        """A dictionary of prefixes for each guild
+
+        Returns:
+            dict[int, list[str]]: A dictionary of prefixes for each guild
+        """
+        return self._prefixes
 
     async def fsWatcher(self) -> None:
         cogsPath = SyncPath(__file__).parent.joinpath("Cogs")

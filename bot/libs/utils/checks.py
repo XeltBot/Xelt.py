@@ -1,45 +1,50 @@
-import logging
+from __future__ import annotations
 
-import asyncpg
-import redis.asyncio as redis
-from redis.asyncio.connection import ConnectionPool
+from typing import Callable, TypeVar
 
-logger = logging.getLogger("discord")
+from discord import app_commands
+from discord.ext import commands
 
-
-async def check_pg(pool: asyncpg.Pool) -> bool:
-    """Ensures that the current connection pulled from the pool can be run.
-
-    Args:
-        conn_pool (asyncpg.Pool): The connection pool to get connections from.
-
-    Returns:
-        bool: True if the connection can be ran.
-    """
-    async with pool.acquire() as conn:
-        connStatus = conn.is_closed()
-        if connStatus is False:
-            return True
-    return False
+T = TypeVar("T")
 
 
-async def check_redis(redis_pool: ConnectionPool):
-    r: redis.Redis = redis.Redis(connection_pool=redis_pool)
-    return await r.ping()
-
-
-async def check_db_servers(pool: asyncpg.Pool, redis_pool: ConnectionPool) -> bool:
-    """Ensures that the current connection pulled from the pool can be run for both PostgreSQL and Redis.
-
-    Args:
-        pool (asyncpg.Pool): Asyncpg connection pool
-        redis_pool (ConnectionPool): Redis connection pool
-
-    Returns:
-        bool: True if the connection can be ran. False if both or one of them can't be ran.
-    """
-    logger = logging.getLogger("discord")
-    if await check_pg(pool) and await check_redis(redis_pool):
-        logger.info("PostgreSQL and Redis are up")
+# For time's sake I might as well take these from RDanny
+# There is really no used of creating my own system when there is one out there already
+async def check_guild_permissions(
+    ctx: commands.Context, perms: dict[str, bool], *, check=all
+) -> bool:
+    is_owner = await ctx.bot.is_owner(ctx.author)
+    if is_owner:
         return True
-    return False
+
+    if ctx.guild is None:
+        return False
+
+    resolved = ctx.author.guild_permissions  # type: ignore
+    return check(
+        getattr(resolved, name, None) == value for name, value in perms.items()
+    )
+
+
+def hybrid_permissions_check(**perms: bool) -> Callable[[T], T]:
+    async def pred(ctx: commands.Context):
+        return await check_guild_permissions(ctx, perms)
+
+    def decorator(func: T) -> T:
+        commands.check(pred)(func)
+        app_commands.default_permissions(**perms)(func)
+        return func
+
+    return decorator
+
+
+def is_manager():
+    return hybrid_permissions_check(manage_guild=True)
+
+
+def is_mod():
+    return hybrid_permissions_check(ban_members=True, manage_messages=True)
+
+
+def is_admin():
+    return hybrid_permissions_check(administrator=True)
