@@ -2,7 +2,7 @@ from typing import Optional, Union
 from uuid import UUID
 
 
-def CommandKeyBuilder(
+def command_key_builder(
     prefix: Optional[str] = "cache",
     namespace: Optional[str] = "xeltpy",
     id: Optional[Union[str, int, UUID]] = None,

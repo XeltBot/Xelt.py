@@ -3,15 +3,15 @@ from .connection_checks import check_db_servers
 from .converters import PrefixConverter
 from .embeds import ConfirmEmbed, Embed, ErrorEmbed, SuccessActionEmbed
 from .prefix import get_prefix
-from .utils import encodeDatetime, parseDatetime
+from .utils import encode_datetime, parse_datetime
 from .xelt_logger import XeltLogger
 
 __all__ = [
     "check_db_servers",
     "PrefixConverter",
     "Embed",
-    "parseDatetime",
-    "encodeDatetime",
+    "parse_datetime",
+    "encode_datetime",
     "XeltLogger",
     "get_prefix",
     "is_manager",

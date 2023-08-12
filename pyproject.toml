@@ -45,13 +45,24 @@ profile = 'black'
 
 [tool.pyright]
 include = ["bot/**"]
-exclude = ["**/__pycache__", "**/.mypy_cache", "**/.dmpypy.json"]
-ignore = ["docker"]
+exclude = [
+    "**/__pycache__", 
+    "**/.mypy_cache", 
+    "**/.dmpypy.json", 
+    "docs",
+    "docker"
+]
 reportMissingImports = true
-reportMissingTypeStubs = false
+typeCheckingMode = "basic"
+reportUnnecessaryTypeIgnoreComment = "warning"
 
 [tool.bandit]
 skips = ["B311", "B101"]
+
+[tool.ruff]
+ignore = ["E501"]
+select = ["E", "F", "N"]
+
 
 [build-system]
 requires = ["poetry-core"]

@@ -72,14 +72,14 @@ class XeltCore(commands.Bot):
         """
         return self._prefixes
 
-    async def fsWatcher(self) -> None:
-        cogsPath = SyncPath(__file__).parent.joinpath("Cogs")
-        async for changes in awatch(cogsPath):
-            changesList = list(changes)[0]
-            if changesList[0].modified == 2:
-                reloadFile = SyncPath(changesList[1])
-                self.logger.info(f"Reloading extension: {reloadFile.name[:-3]}")
-                await self.reload_extension(f"cogs.{reloadFile.name[:-3]}")
+    async def fs_watcher(self) -> None:
+        cogs_path = SyncPath(__file__).parent.joinpath("Cogs")
+        async for changes in awatch(cogs_path):
+            changes_list = list(changes)[0]
+            if changes_list[0].modified == 2:
+                reload_file = SyncPath(changes_list[1])
+                self.logger.info(f"Reloading extension: {reload_file.name[:-3]}")
+                await self.reload_extension(f"cogs.{reload_file.name[:-3]}")
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
@@ -90,10 +90,10 @@ class XeltCore(commands.Bot):
         self.loop.create_task(check_db_servers(self._pool, self._redis_pool))
 
         if self.dev_mode is True and _fsw is True:
-            self.logger.info("Dev mode is enabled. Loading Jishaku and FSWatcher")
-            self.loop.create_task(self.fsWatcher())
+            self.logger.info("Dev mode is enabled. Loading Jishaku and fs_watcher")
+            self.loop.create_task(self.fs_watcher())
             await self.load_extension("jishaku")
 
     async def on_ready(self):
-        currUser = None if self.user is None else self.user.name
-        self.logger.info(f"{currUser} is fully ready!")
+        curr_user = None if self.user is None else self.user.name
+        self.logger.info(f"{curr_user} is fully ready!")

@@ -7,7 +7,7 @@ import pytest
 path = Path(__file__).parents[2].joinpath("bot")
 sys.path.append(str(path))
 
-from libs.cache import CommandKeyBuilder, XeltCache
+from libs.cache import XeltCache, command_key_builder
 from redis.asyncio.connection import ConnectionPool
 
 
@@ -31,10 +31,10 @@ def load_json_data():
 
 @pytest.mark.asyncio
 async def test_basic_cache(load_conn_pool, load_str_data):
-    key = CommandKeyBuilder(id=None, command=None)
+    key = command_key_builder(id=None, command=None)
     cache = XeltCache(connection_pool=load_conn_pool)
-    await cache.setBasicCache(key=key, value=load_str_data)
-    res = await cache.getBasicCache(key)
+    await cache.set_basic_cache(key=key, value=load_str_data)
+    res = await cache.get_basic_cache(key)
     assert (res == load_str_data.encode()) and (isinstance(res, bytes))  # nosec
 
 
@@ -42,8 +42,8 @@ async def test_basic_cache(load_conn_pool, load_str_data):
 async def test_json_cache(load_json_data):
     connPool = ConnectionPool().from_url("redis://localhost:6379/0")
     cache = XeltCache(connection_pool=connPool)
-    await cache.setJSONCache(key="main3", value=load_json_data, ttl=5)
-    res = await cache.getJSONCache(key="main3")
+    await cache.set_json_cache(key="main3", value=load_json_data, ttl=5)
+    res = await cache.get_json_cache(key="main3")
     assert (res == load_json_data) and (isinstance(res, dict))  # nosec
 
 
@@ -51,6 +51,6 @@ async def test_json_cache(load_json_data):
 async def test_cache_exists(load_str_data):
     connPool = ConnectionPool().from_url("redis://localhost:6379/0")
     cache = XeltCache(connection_pool=connPool)
-    await cache.setBasicCache(key="main5", value=load_str_data, ttl=15)
-    res = await cache.cacheExists(key="main5")
+    await cache.set_basic_cache(key="main5", value=load_str_data, ttl=15)
+    res = await cache.cache_exists(key="main5")
     assert res is True  # nosec

@@ -4,7 +4,7 @@ from typing import Any, Dict, Union
 import ciso8601
 
 
-def parseDatetime(datetime: Union[datetime, str]) -> datetime:
+def parse_datetime(datetime: Union[datetime, str]) -> datetime:
     """Parses a datetime object or a string into a datetime object
 
     Args:
@@ -18,7 +18,7 @@ def parseDatetime(datetime: Union[datetime, str]) -> datetime:
     return datetime
 
 
-def encodeDatetime(dict: Dict[str, Any]) -> Dict[str, Any]:
+def encode_datetime(dict: Dict[str, Any]) -> Dict[str, Any]:
     """Takes a dictionary and encodes all datetime objects into ISO 8601 strings
 
     Args:

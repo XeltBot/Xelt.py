@@ -19,18 +19,18 @@ async def test_cpm():
 
 def test_creation_cp():
     xeltCP = XeltCPM(uri=REDIS_URI)
-    connPool = xeltCP.createPool()
+    connPool = xeltCP.create_pool()
     assert isinstance(connPool, ConnectionPool)
 
 
 def test_get_cp():
     xeltCP = XeltCPM(uri=REDIS_URI)
-    connPool = xeltCP.getConnPool()
+    connPool = xeltCP.get_pool()
     assert isinstance(connPool, ConnectionPool)
 
 
 def test_created_cp():
     xeltCP = XeltCPM(uri=REDIS_URI)
-    xeltCP.createPool()
-    newConnPool = xeltCP.getConnPool()
+    xeltCP.create_pool()
+    newConnPool = xeltCP.get_pool()
     assert isinstance(newConnPool, ConnectionPool)
