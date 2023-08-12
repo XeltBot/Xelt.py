@@ -8,8 +8,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # We will need git later...
 RUN apt update \
   && apt install -y --no-install-recommends \
-  build-essential \
-  ca-certificates \
   curl \
   git
 
@@ -27,8 +25,7 @@ COPY /poetry.lock /Xelt/
 
 # Save the dependencies as wheels (.whl)
 # In order to get this ready for production, the dev dependencies are not included
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --only main \
-  && pip wheel --wheel-dir=/Xelt/wheels -r requirements.txt
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes --only main
 
 ####################################################################################################
 ## Final image
@@ -40,12 +37,11 @@ FROM python:3.11-slim-bookworm
 RUN apt update \
   && apt install -y --no-install-recommends \
   tini \
-  ca-certificates \
   bash \
   netcat-traditional \
-  libnacl-dev \
   libopus-dev \
   libffi-dev \
+  libsodium-dev \
   git
 
 # Note that wait-for is being copied over. This will be needed for Docker Compose support later
@@ -59,11 +55,7 @@ COPY /migrate.py /Xelt/migrate.py
 COPY /migrations /Xelt/migrations/
 
 # Copy over all of the wheels and requirements.txt
-COPY --from=builder /Xelt/wheels /Xelt/wheels
 COPY --from=builder /Xelt/requirements.txt /Xelt/requirements.txt
-
-# Always a good idea to upgrade pip and setuptools
-RUN pip install --upgrade pip setuptools
 
 # We want to run everything now as a non-root user
 # By default, inside a Docekr container, all of the files and scripts are ran as root
@@ -79,7 +71,7 @@ USER xelt
 ENV PATH="${PATH}:/home/xelt/.local/bin"
 
 # Finalally actually install all of the libraries
-RUN pip install --user --no-index --find-links=/Xelt/wheels -r requirements.txt
+RUN pip install --user -r requirements.txt
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
 

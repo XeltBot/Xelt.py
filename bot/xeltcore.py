@@ -1,4 +1,5 @@
 import logging
+import signal
 from pathlib import Path as SyncPath
 
 import asyncpg
@@ -83,6 +84,12 @@ class XeltCore(commands.Bot):
 
     async def setup_hook(self) -> None:
         """The setup that is called before the bot is ready."""
+
+        def stop():
+            self.loop.create_task(self.close())
+
+        self.loop.add_signal_handler(signal.SIGTERM, stop)
+        self.loop.add_signal_handler(signal.SIGINT, stop)
         for cog in EXTENSIONS:
             self.logger.debug(f"Loaded Cog: {cog}")
             await self.load_extension(cog)
