@@ -27,7 +27,7 @@ discord-ext-menus = {git = "https://github.com/Rapptz/discord-ext-menus.git", re
 pre-commit = "^3.5.0"
 pyinstrument = "^4.6.0"
 pyright = "^1.1.334"
-watchfiles = "^0.20.0"
+watchfiles = "^0.21.0"
 jishaku = "^2.5.1"
 ruff = "^0.1.2"
 
