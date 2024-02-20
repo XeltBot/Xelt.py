@@ -4,8 +4,8 @@ on:
     types:
       - opened
   workflow_run:
-    workflows: ["Docker Build", "Tests", "Lint"]
-    branches: [dev]
+    workflows: ["Lint", "CodeQL"]
+    branches: [rerwite]
     types: 
       - completed
 

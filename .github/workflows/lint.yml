@@ -3,50 +3,36 @@ name: Lint
 on:
   push:
     branches:
-      - dev/v3
+      - rewrite
     
   pull_request:
     branches:
-      - dev/v3
-      - main
-
-
+      - rewrite
 
 jobs: 
   Analyze:
     name: Analyze
     runs-on: ubuntu-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [3.9, '3.10', '3.11', '3.12']
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         
-      - name: Set up Python 3.11
+      - name: Set up Python ${{ matrix.version }}
         id: setup-python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.version }}
 
-      - name: Set up Node.js 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Set up Poetry
-        uses: Gr1N/setup-poetry@v8
-
-      - name: Cache Poetry
-        id: cache-poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-v4-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install Poetry Dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
+      - name: Install Tox
         run: |
-          poetry install --with=dev
-      
-      - name: Run Pyright
+          pip install "tox>=4.13.0,<5"
+
+      - name: Lint
         run: |
-          make pyright
+          tox run -e lint

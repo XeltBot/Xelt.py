@@ -1,0 +1,33 @@
+[tool.isort]
+profile = 'black'
+combine_as_imports = true
+combine_star = true
+line_length = 80
+
+[tool.pyright]
+include = ["bot/**"]
+exclude = [
+    "**/__pycache__", 
+    "**/.mypy_cache", 
+    "**/.dmpypy.json", 
+]
+reportMissingImports = true
+typeCheckingMode = "basic"
+reportUnnecessaryTypeIgnoreComment = "warning"
+
+[tool.bandit]
+skips = ["B311", "B101"]
+
+[tool.ruff]
+ignore = ["E501", "N999", "E402", "S311"]
+select = ["E", "F", "N", "ASYNC", "S", "ERA"]
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra"
+pythonpath = [
+    "bot"
+]
+testpaths = [
+    "bot/tests",
+]

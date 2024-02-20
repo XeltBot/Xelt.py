@@ -7,4 +7,4 @@ updates:
     commit-message:
       prefix: "[pip]"
       include: "scope"
-    target-branch: "dev/v3"
+    target-branch: "rewrite"
