@@ -11,9 +11,9 @@ RUN apt-get update \
   && apt-get clean
 
 WORKDIR /xelt
-COPY /xelt /xelt/bot/
-COPY /docker/start.sh /rodhaj/start.sh
-COPY /docker/wait-for /rodhaj/wait-for
+COPY /bot /xelt/bot/
+COPY /docker/start.sh /xelt/start.sh
+COPY /docker/wait-for /xelt/wait-for
 COPY /requirements.txt /xelt/requirements.txt
 
 RUN adduser --disabled-password --gecos "" xelt \

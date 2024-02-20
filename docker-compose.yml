@@ -1,0 +1,18 @@
+version: "3.9"
+name: "xelt-dev"
+services:
+  postgres:
+    container_name: Xelt-Postgres
+    image: xelt-pg:dev-latest
+    build:
+      context: ./docker/pg
+      dockerfile: Dockerfile
+    env_file:
+      - docker-compose.env
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  postgres_volume:
