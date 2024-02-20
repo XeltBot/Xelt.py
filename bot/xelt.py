@@ -10,6 +10,7 @@ from discord.ext import commands
 from libs.utils.config import XeltConfig
 from libs.utils.context import XeltContext
 from libs.utils.errors import send_error_embed
+from libs.utils.help import XeltHelp
 from libs.utils.reloader import Reloader
 
 
@@ -30,6 +31,7 @@ class Xelt(commands.Bot):
                 everyone=False, replied_user=False
             ),
             command_prefix=["?", "!"],
+            help_command=XeltHelp(),
             intents=intents,
             **kwargs,
         )
