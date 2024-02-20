@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+  CREATE ROLE xelt WITH LOGIN PASSWORD '$XELT_PASSWORD';
+  CREATE DATABASE xelt OWNER xelt;
+EOSQL
